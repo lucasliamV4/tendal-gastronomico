@@ -80,6 +80,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:site_name", content: "Tendal Gastronomia" },
       { property: "og:locale", content: "pt_BR" },
       { name: "twitter:card", content: "summary_large_image" },
+      { title: "Tendal Gastronômico" },
+      { property: "og:title", content: "Tendal Gastronômico" },
+      { name: "twitter:title", content: "Tendal Gastronômico" },
+      { name: "description", content: "A gastronomic landing page showcasing culinary offerings and restaurant information." },
+      { property: "og:description", content: "A gastronomic landing page showcasing culinary offerings and restaurant information." },
+      { name: "twitter:description", content: "A gastronomic landing page showcasing culinary offerings and restaurant information." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f0cc382e-21dd-4231-9813-5c2e85440c2c/id-preview-ed0f756f--555bc647-7e38-4fbd-86fc-942929201dbf.lovable.app-1779825147253.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f0cc382e-21dd-4231-9813-5c2e85440c2c/id-preview-ed0f756f--555bc647-7e38-4fbd-86fc-942929201dbf.lovable.app-1779825147253.png" },
+      { property: "og:type", content: "website" },
     ],
     links: [
       {
