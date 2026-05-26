@@ -14,7 +14,377 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      coupons_claimed: {
+        Row: {
+          claimed_at: string
+          coupon_code: string
+          id: string
+          notes: string | null
+          promotion_id: string | null
+          referrer: string | null
+          session_id: string | null
+          source_cta: string | null
+          user_agent: string | null
+          validated_at: string | null
+        }
+        Insert: {
+          claimed_at?: string
+          coupon_code: string
+          id?: string
+          notes?: string | null
+          promotion_id?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          source_cta?: string | null
+          user_agent?: string | null
+          validated_at?: string | null
+        }
+        Update: {
+          claimed_at?: string
+          coupon_code?: string
+          id?: string
+          notes?: string | null
+          promotion_id?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          source_cta?: string | null
+          user_agent?: string | null
+          validated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coupons_claimed_promotion_id_fkey"
+            columns: ["promotion_id"]
+            isOneToOne: false
+            referencedRelation: "promotion"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      faq_items: {
+        Row: {
+          active: boolean
+          answer: string
+          created_at: string
+          display_order: number
+          id: string
+          question: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          answer: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          question: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          answer?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          question?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      holiday_overrides: {
+        Row: {
+          closed: boolean
+          created_at: string
+          custom_close_time: string | null
+          custom_label: string | null
+          custom_open_time: string | null
+          id: string
+          override_date: string
+        }
+        Insert: {
+          closed?: boolean
+          created_at?: string
+          custom_close_time?: string | null
+          custom_label?: string | null
+          custom_open_time?: string | null
+          id?: string
+          override_date: string
+        }
+        Update: {
+          closed?: boolean
+          created_at?: string
+          custom_close_time?: string | null
+          custom_label?: string | null
+          custom_open_time?: string | null
+          id?: string
+          override_date?: string
+        }
+        Relationships: []
+      }
+      menu_items: {
+        Row: {
+          active: boolean
+          category: string
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          image_slot_key: string | null
+          name: string
+          price_cents: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          image_slot_key?: string | null
+          name: string
+          price_cents?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          image_slot_key?: string | null
+          name?: string
+          price_cents?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      operating_hours: {
+        Row: {
+          close_time: string | null
+          closed: boolean
+          day_of_week: number
+          id: string
+          label: string | null
+          open_time: string | null
+          updated_at: string
+        }
+        Insert: {
+          close_time?: string | null
+          closed?: boolean
+          day_of_week: number
+          id?: string
+          label?: string | null
+          open_time?: string | null
+          updated_at?: string
+        }
+        Update: {
+          close_time?: string | null
+          closed?: boolean
+          day_of_week?: number
+          id?: string
+          label?: string | null
+          open_time?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      promotion: {
+        Row: {
+          active: boolean
+          badge_text: string
+          cta_button_text: string
+          description: string
+          eligibility_text: string
+          headline: string
+          id: string
+          title: string
+          updated_at: string
+          whatsapp_message_template: string
+        }
+        Insert: {
+          active?: boolean
+          badge_text?: string
+          cta_button_text?: string
+          description?: string
+          eligibility_text?: string
+          headline?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          whatsapp_message_template?: string
+        }
+        Update: {
+          active?: boolean
+          badge_text?: string
+          cta_button_text?: string
+          description?: string
+          eligibility_text?: string
+          headline?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          whatsapp_message_template?: string
+        }
+        Relationships: []
+      }
+      site_config: {
+        Row: {
+          address_city: string
+          address_neighborhood: string
+          address_postal_code: string
+          address_state: string
+          address_street: string
+          business_name: string
+          ga4_measurement_id: string | null
+          google_ads_conversion_id: string | null
+          google_ads_conversion_label: string | null
+          google_maps_embed_url: string
+          google_maps_url: string
+          gtm_id: string | null
+          id: string
+          instagram_url: string | null
+          meta_pixel_id: string | null
+          reference_distance: string
+          reference_landmark: string
+          updated_at: string
+          whatsapp_default_message: string
+          whatsapp_number: string
+        }
+        Insert: {
+          address_city?: string
+          address_neighborhood?: string
+          address_postal_code?: string
+          address_state?: string
+          address_street?: string
+          business_name?: string
+          ga4_measurement_id?: string | null
+          google_ads_conversion_id?: string | null
+          google_ads_conversion_label?: string | null
+          google_maps_embed_url?: string
+          google_maps_url?: string
+          gtm_id?: string | null
+          id?: string
+          instagram_url?: string | null
+          meta_pixel_id?: string | null
+          reference_distance?: string
+          reference_landmark?: string
+          updated_at?: string
+          whatsapp_default_message?: string
+          whatsapp_number?: string
+        }
+        Update: {
+          address_city?: string
+          address_neighborhood?: string
+          address_postal_code?: string
+          address_state?: string
+          address_street?: string
+          business_name?: string
+          ga4_measurement_id?: string | null
+          google_ads_conversion_id?: string | null
+          google_ads_conversion_label?: string | null
+          google_maps_embed_url?: string
+          google_maps_url?: string
+          gtm_id?: string | null
+          id?: string
+          instagram_url?: string | null
+          meta_pixel_id?: string | null
+          reference_distance?: string
+          reference_landmark?: string
+          updated_at?: string
+          whatsapp_default_message?: string
+          whatsapp_number?: string
+        }
+        Relationships: []
+      }
+      site_images: {
+        Row: {
+          alt_text: string | null
+          id: string
+          slot_key: string
+          storage_path: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          alt_text?: string | null
+          id?: string
+          slot_key: string
+          storage_path?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Update: {
+          alt_text?: string | null
+          id?: string
+          slot_key?: string
+          storage_path?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          active: boolean
+          author_context: string | null
+          author_name: string
+          content: string
+          created_at: string
+          display_order: number
+          id: string
+          rating: number | null
+          source: string | null
+        }
+        Insert: {
+          active?: boolean
+          author_context?: string | null
+          author_name: string
+          content: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          rating?: number | null
+          source?: string | null
+        }
+        Update: {
+          active?: boolean
+          author_context?: string | null
+          author_name?: string
+          content?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          rating?: number | null
+          source?: string | null
+        }
+        Relationships: []
+      }
+      urgent_banner: {
+        Row: {
+          active: boolean
+          id: string
+          link_url: string | null
+          text: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          id?: string
+          link_url?: string | null
+          text?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          id?: string
+          link_url?: string | null
+          text?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
