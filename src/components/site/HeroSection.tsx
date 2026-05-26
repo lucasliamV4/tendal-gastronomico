@@ -47,12 +47,12 @@ const HeroSection = () => {
           </span>
 
           <h1 className="mt-4 break-words font-heading text-4xl font-bold leading-tight sm:text-5xl md:text-5xl lg:text-6xl">
-            Almoco de verdade na Lapa: brasa, ambiente arborizado e chopp artesanal proprio.
+            Almoço de verdade na Lapa: brasa, ambiente arborizado e chopp artesanal próprio.
           </h1>
 
           <p className="mt-5 text-lg text-white/85 md:text-xl">
             Dentro do Centro Cultural Tendal da Lapa. Carne grelhada no charbroiler, arroz que muda
-            toda semana, e um patio pra voce comer sem pressa.
+            toda semana, e um pátio pra você comer sem pressa.
           </p>
 
           {promotion?.active && (
