@@ -3,7 +3,7 @@ import { useSiteConfig } from "@/contexts/SiteConfigContext";
 import { useSiteImage } from "@/hooks/useSupabaseQueries";
 
 const NAV_LINKS = [
-  { href: "#cardapio", label: "Cardapio" },
+  { href: "#cardapio", label: "Cardápio" },
   { href: "#cupom", label: "Cupom" },
   { href: "#como-chegar", label: "Como chegar" },
   { href: "#testemunhos", label: "Testemunhos" },
