@@ -17,7 +17,7 @@ const ComoChegarSection = () => {
           <div>
             <h2 className="font-heading text-3xl font-bold md:text-4xl">Como chegar</h2>
             <p className="mt-3 text-lg text-muted-foreground">
-              A {config?.reference_distance ?? "60 metros do Poupa Tempo"}, num quintal que voce nao
+              A {config?.reference_distance ?? "60 metros do Poupa Tempo"}, num quintal que você não
               imagina que existe.
             </p>
             <p className="mt-3 text-sm text-muted-foreground">
@@ -26,13 +26,13 @@ const ComoChegarSection = () => {
             </p>
             <div className="mt-8 rounded-xl border bg-card p-5">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Endereco
+                Endereço
               </p>
               <p className="mt-2 font-heading text-xl font-bold">
                 {config?.address_street ?? "Rua Guaicurus, 1100"}
               </p>
               <p className="text-sm text-muted-foreground">
-                {config?.address_neighborhood ?? "Lapa"} - {config?.address_city ?? "Sao Paulo"}/
+                {config?.address_neighborhood ?? "Lapa"} - {config?.address_city ?? "São Paulo"}/
                 {config?.address_state ?? "SP"} - {config?.address_postal_code ?? "05033-002"}
               </p>
             </div>
