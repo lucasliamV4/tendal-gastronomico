@@ -1,8 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&display=swap");
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+
+html {
+  scroll-behavior: smooth;
+}
+section[id] {
+  scroll-margin-top: 5rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
 
 /*
  * Design system definition.
@@ -59,34 +72,68 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-brand-pink: var(--brand-pink);
+  --color-brand-cyan: var(--brand-cyan);
+  --color-brand-orange: var(--brand-orange);
+  --color-whatsapp: var(--whatsapp);
+  --color-whatsapp-foreground: var(--whatsapp-foreground);
+  --font-heading: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+
+  /* Brand palette extracted from the Tendal logo */
+  --brand-pink: oklch(0.62 0.24 357); /* #E6228A */
+  --brand-pink-foreground: oklch(0.99 0 0);
+  --brand-cyan: oklch(0.71 0.13 230); /* #28A8DD */
+  --brand-cyan-foreground: oklch(0.18 0.02 250);
+  --brand-orange: oklch(0.72 0.18 52); /* #F08020 */
+  --brand-orange-foreground: oklch(0.18 0.02 50);
+
+  /* WhatsApp brand color (#25D366) */
+  --whatsapp: oklch(0.74 0.19 150);
+  --whatsapp-foreground: oklch(1 0 0);
+
+  --background: oklch(0.995 0.003 60);
+  --foreground: oklch(0.18 0.03 320);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
+  --card-foreground: oklch(0.18 0.03 320);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.18 0.03 320);
+
+  --primary: var(--brand-pink);
+  --primary-foreground: var(--brand-pink-foreground);
+  --secondary: var(--brand-cyan);
+  --secondary-foreground: var(--brand-cyan-foreground);
+  --accent: var(--brand-orange);
+  --accent-foreground: var(--brand-orange-foreground);
+
+  --muted: oklch(0.965 0.01 320);
+  --muted-foreground: oklch(0.48 0.04 320);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --border: oklch(0.92 0.015 320);
+  --input: oklch(0.92 0.015 320);
+  --ring: var(--brand-pink);
+
+  --chart-1: var(--brand-pink);
+  --chart-2: var(--brand-cyan);
+  --chart-3: var(--brand-orange);
+  --chart-4: oklch(0.65 0.18 320);
+  --chart-5: oklch(0.72 0.16 200);
+
+  /* Brand gradients & shadows */
+  --gradient-brand: linear-gradient(
+    135deg,
+    var(--brand-orange) 0%,
+    var(--brand-pink) 55%,
+    var(--brand-cyan) 100%
+  );
+  --gradient-warm: linear-gradient(135deg, var(--brand-orange) 0%, var(--brand-pink) 100%);
+  --shadow-brand: 0 18px 40px -18px color-mix(in oklab, var(--brand-pink) 55%, transparent);
+
   --sidebar: oklch(0.984 0.003 247.858);
   --sidebar-foreground: oklch(0.129 0.042 264.695);
   --sidebar-primary: oklch(0.208 0.042 265.755);
@@ -140,5 +187,36 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+  .bg-gradient-brand {
+    background-image: var(--gradient-brand);
+  }
+  .bg-gradient-warm {
+    background-image: var(--gradient-warm);
+  }
+  .text-gradient-brand {
+    background-image: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .shadow-brand {
+    box-shadow: var(--shadow-brand);
   }
 }

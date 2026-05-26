@@ -1,14 +1,19 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
-  Outlet,
+  HeadContent,
   Link,
+  Outlet,
+  Scripts,
   createRootRouteWithContext,
   useRouter,
-  HeadContent,
-  Scripts,
 } from "@tanstack/react-router";
 
+import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { SiteConfigProvider } from "@/contexts/SiteConfigContext";
+import { WhatsAppProvider } from "@/contexts/WhatsAppContext";
 import appCss from "../styles.css?url";
+import logoTendal from "@/assets/logo-tendal.png";
 
 function NotFoundComponent() {
   return (
@@ -72,16 +77,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Tendal Gastronomia — Almoco com brasa na Lapa" },
+      {
+        name: "description",
+        content:
+          "Almoco grelhado no charbroiler, patio arborizado e chopp artesanal proprio. Dentro do Centro Cultural Tendal da Lapa.",
+      },
+      { property: "og:title", content: "Tendal Gastronomia — Almoco com brasa na Lapa" },
+      {
+        property: "og:description",
+        content:
+          "Carne grelhada na brasa, ambiente arborizado e cervejaria propria. A 60m do Poupa Tempo Lapa.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      {
+        rel: "icon",
+        type: "image/png",
+        href: logoTendal,
+      },
       {
         rel: "stylesheet",
         href: appCss,
@@ -113,7 +130,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <AuthProvider>
+        <SiteConfigProvider>
+          <WhatsAppProvider>
+            <Outlet />
+            <Toaster />
+          </WhatsAppProvider>
+        </SiteConfigProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
