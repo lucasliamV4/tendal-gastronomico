@@ -62,7 +62,7 @@ const FooterCTA = () => {
             <p>
               {config?.business_name ?? "Tendal Gastronomia"} -{" "}
               {config?.address_street ?? "Rua Guaicurus, 1100"} -{" "}
-              {config?.address_neighborhood ?? "Lapa"}, {config?.address_city ?? "Sao Paulo"}/
+              {config?.address_neighborhood ?? "Lapa"}, {config?.address_city ?? "São Paulo"}/
               {config?.address_state ?? "SP"}
             </p>
             {config?.instagram_url && (
