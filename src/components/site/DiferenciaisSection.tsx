@@ -19,7 +19,7 @@ const DIFFERENTIALS: Differential[] = [
     imageSlot: "ambiente.jpg",
     title: "Patio arborizado, fora do barulho da rua",
     description:
-      "Um quintal verde dentro do Centro Cultural. Almoco sem buzina, com sombra de arvore e seguranca monitorada. Pausa de verdade.",
+      "Um quintal verde dentro do Centro Cultural. Almoço sem buzina, com sombra de árvore e segurança monitorada. Pausa de verdade.",
     badge: "Refugio urbano",
   },
   {
