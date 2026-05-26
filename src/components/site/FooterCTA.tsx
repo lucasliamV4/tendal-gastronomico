@@ -34,11 +34,11 @@ const FooterCTA = () => {
             />
           </div>
           <h2 className="font-heading text-3xl font-bold md:text-4xl">
-            Bate o ponto, atravessa a rua e vem almocar.
+            Bate o ponto, atravessa a rua e vem almoçar.
           </h2>
           <p className="mt-4 text-lg text-white/80">
             A {config?.reference_distance ?? "60 metros do Poupa Tempo"}. Brasa acesa de segunda a
-            sexta, 11h30 as 15h.
+            sexta, 11h30 às 15h.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <button
