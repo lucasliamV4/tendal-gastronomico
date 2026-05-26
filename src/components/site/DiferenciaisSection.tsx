@@ -37,10 +37,10 @@ const DiferenciaisSection = () => (
       <div className="mx-auto max-w-2xl text-center">
         <h2 className="font-heading text-3xl font-bold md:text-4xl">O que nos diferencia</h2>
         <p className="mt-3 text-lg text-muted-foreground">
-          Nao competimos por preco - competimos por experiencia.
+          Não competimos por preço — competimos por experiência.
         </p>
         <p className="mt-2 text-sm text-muted-foreground">
-          Na regiao da Lapa tem 15 lugares vendendo PF a R$ 17. Nenhum entrega o que voce vai
+          Na região da Lapa tem 15 lugares vendendo PF a R$ 17. Nenhum entrega o que você vai
           encontrar aqui.
         </p>
       </div>
