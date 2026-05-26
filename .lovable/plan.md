@@ -1,38 +1,49 @@
-Revisão da versão mobile (390px) da landing do Tendal. Naveguei pelo preview e identifiquei os ajustes abaixo.
+Análise de performance: o site carrega 55MB de imagens. Os culpados:
 
-## Problemas encontrados
+| Arquivo | Tamanho | Uso |
+|---|---|---|
+| `ambiente.jpg` | **24MB** | Card "Pátio arborizado" (4:3, pequeno) |
+| `logo_tria.jpg` | **12MB** | Card "Chopp artesanal" (4:3, pequeno) |
+| `charbroiler.png` | 2.7MB | Card "Carne na brasa" |
+| `hero.png` | 2.3MB | Background do Hero (LCP) |
+| `plate_*.png` (5 arquivos) | ~2.5MB cada | Cardápio (quadrado ~600px) |
+| `scroll_*.png` (5 arquivos) | ~600–900KB | Thumbs 80×80 do cardápio |
 
-### 1. Header (`src/components/site/Header.tsx`)
-- **Logo gigante**: `h-16 md:h-20` ocupa quase metade da altura do header no mobile, espremendo o botão WhatsApp.
-- **Navegação sumida**: o `<nav>` está `hidden md:flex`. No mobile não existe menu hambúrguer — usuário não consegue pular para Cardápio, Cupom, Como chegar, etc.
+FCP = 3.2s, DOM Interactive = 1.7s. Cada imagem leva 1.5–2.2s pra baixar.
 
-### 2. FooterCTA (`src/components/site/FooterCTA.tsx`)
-- Logo `h-32 md:h-40` (128px) é exagerada no mobile, empurra o conteúdo principal para baixo.
+## Plano
 
-### 3. CardapioSection (`src/components/site/CardapioSection.tsx`)
-- Existe um `<div className="mx-auto max-w-2xl text-center">` **vazio** logo no topo da seção (linhas 20–22) gerando espaço morto.
-- Não há um título de seção “Cardápio” acima — só aparece o H3 "O PRATO NOSSO DE CADA DIA...".
+### 1. Comprimir imagens (sem mudar caminho)
+Usar `imagemagick` (via nix) para reescrever todos os arquivos in-place, mantendo nomes:
+- `ambiente.jpg` → reencodar a 1600px largura, qualidade 80 (~200KB)
+- `logo_tria.jpg` → idem
+- `hero.png` → reencodar como PNG otimizado de 1920px (~300KB)
+- `charbroiler.png` e `plate_*.png` → reduzir para 800px, qualidade 85 (~150KB cada)
+- `scroll_*.png` → 160×160 (2× o tamanho exibido), qualidade 80 (~20KB cada)
 
-### 4. WhatsAppWidget (`src/components/site/WhatsAppWidget.tsx`)
-- Botão flutuante fixo em `bottom-5 right-5` sobrepõe o botão verde "Pedir pelo WhatsApp" no cardápio e os CTAs do footer no mobile.
-- Sem `padding-bottom` no `<main>` para compensar.
+Mantenho extensões originais para não tocar em código.
 
-### 5. Hero (`src/components/site/HeroSection.tsx`)
-- O badge "60 METROS DO POUPA TEMPO LAPA" quebra em duas linhas. Pode usar `whitespace-nowrap` ou texto mais curto no mobile.
-- H1 com `break-words` ok, mas o tamanho `text-3xl sm:text-4xl` pode ser ajustado para `text-4xl` no mobile para mais impacto.
+### 2. Lazy-load + decoding async em imagens não-críticas
+- `DiferenciaisSection`: `loading="lazy" decoding="async"` nas 3 imagens
+- `CardapioSection`: `loading="lazy"` nas thumbs e prato
+- `ComoChegarSection`: já tem `loading="lazy"` no iframe ✓
 
-### 6. ComoChegarSection (`src/components/site/ComoChegarSection.tsx`)
-- O mapa do Google fica vazio/branco no preview mobile (visualmente é um grande bloco em branco entre "Abrir no Google Maps" e o footer). Vou validar se o iframe está carregando ou se precisa de fallback.
+### 3. Hero como LCP
+- O hero é background-image via CSS (`url('/images/hero.png')`). Background images não são pré-detectadas pelo preload scanner.
+- Adicionar `<link rel="preload" as="image" href="/images/hero.png" fetchpriority="high">` no `head().links` da rota `/`.
 
-## Tarefas
+### 4. Adicionar `width`/`height` nas imagens
+Previne CLS — DiferenciaisSection, CardapioSection plates e thumbs.
 
-1. **Header**: reduzir logo para `h-10 md:h-14`, adicionar menu hambúrguer mobile (sheet/drawer simples) com os links de seção.
-2. **FooterCTA**: reduzir logo para `h-20 md:h-32`.
-3. **CardapioSection**: remover o div vazio, adicionar título "Nosso Cardápio" + subtítulo curto no padrão das outras seções.
-4. **WhatsAppWidget**: ocultar widget flutuante quando o footer estiver visível (intersection observer) **ou** mais simples — adicionar `pb-24` no `<main>` para que o widget nunca cubra CTA. Vou pela solução simples.
-5. **Hero**: badge com `whitespace-nowrap` e padding reduzido; aumentar H1 mobile para `text-4xl`.
-6. **ComoChegar**: confirmar que iframe carrega; senão, manter mas garantir altura mínima razoável e adicionar um link "Abrir mapa" como fallback (já existe).
+### 5. Iframe do Google Maps
+Já tem `loading="lazy"`. Sem mudança.
 
 ## Fora de escopo
-- Não vou mexer em paleta de cores, tipografia ou backend.
-- Não vou alterar a Testemunhos / FAQ (já retornam `null` quando sem dados — comportamento correto).
+- Não vou migrar para `.webp` (exigiria renomear arquivos no Supabase e em vários componentes). A compressão JPEG/PNG já resolve 95% do problema.
+- Não vou mexer em fontes, bundle splitting ou CSS — não são o gargalo.
+- Não vou trocar PNGs por JPG (a transparência é irrelevante aqui mas evita risco de regressão visual).
+
+## Resultado esperado
+- 55MB → ~3MB de imagens
+- FCP esperado: 3.2s → ~1.2s
+- LCP do hero pré-carregado
