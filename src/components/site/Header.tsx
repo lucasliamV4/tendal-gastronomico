@@ -33,7 +33,7 @@ const Header = () => {
           <img
             src={logo?.url || logoTendal}
             alt={logo?.alt_text || config?.business_name || "Tendal Gastronomia"}
-            className="h-10 md:h-14 w-auto"
+            className="h-12 md:h-20 w-auto"
           />
           <span className="sr-only">{config?.business_name ?? "Tendal Gastronomia"}</span>
         </a>
