@@ -28,12 +28,12 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-neutral-950/90 text-white backdrop-blur">
-      <div className="container mx-auto flex h-14 md:h-16 items-center justify-between px-4">
+      <div className="container mx-auto flex h-16 md:h-20 items-center justify-between px-4">
         <a href="/" className="flex items-center gap-3">
           <img
             src={logo?.url || logoTendal}
             alt={logo?.alt_text || config?.business_name || "Tendal Gastronomia"}
-            className="h-10 md:h-14 w-auto"
+            className="h-12 md:h-20 w-auto"
           />
           <span className="sr-only">{config?.business_name ?? "Tendal Gastronomia"}</span>
         </a>
