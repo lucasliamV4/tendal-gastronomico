@@ -31,7 +31,11 @@ const CardapioSection = () => {
             <div className="aspect-square w-full rounded-2xl overflow-hidden bg-muted shadow-md">
               <img 
                 src={selectedProtein.plate} 
-                alt={selectedProtein.name} 
+                alt={selectedProtein.name}
+                width={900}
+                height={900}
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover transition-opacity duration-500" 
               />
             </div>
@@ -48,7 +52,11 @@ const CardapioSection = () => {
                 >
                   <img 
                     src={p.thumb} 
-                    alt={p.name} 
+                    alt={p.name}
+                    width={200}
+                    height={200}
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover bg-white" 
                   />
                 </button>

@@ -60,7 +60,15 @@ const DifferentialCard = ({ imageSlot, title, description, badge }: Differential
   return (
     <article className="overflow-hidden rounded-xl border bg-card shadow-sm">
       <div className="aspect-[4/3] w-full overflow-hidden bg-muted">
-        <img src={localImageUrl} alt={title} className="h-full w-full object-cover" />
+        <img
+          src={localImageUrl}
+          alt={title}
+          width={800}
+          height={600}
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover"
+        />
       </div>
       <div className="p-5">
         {badge && (
