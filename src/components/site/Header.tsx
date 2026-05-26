@@ -27,7 +27,7 @@ const Header = () => {
         </a>
 
         <nav
-          aria-label="Secoes do site"
+          aria-label="Seções do site"
           className="hidden items-center gap-6 text-sm text-white/80 md:flex"
         >
           {NAV_LINKS.map((l) => (
