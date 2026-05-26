@@ -19,9 +19,9 @@ const CupomSection = () => {
         promotionId: promotion.id,
       });
       setIssuedCode(code);
-      toast.success("Cupom gerado!", { description: `Mostre o codigo ${code} ao garcom.` });
+      toast.success("Cupom gerado!", { description: `Mostre o código ${code} ao garçom.` });
     } catch {
-      toast.error("Nao foi possivel gerar o cupom agora.");
+      toast.error("Não foi possível gerar o cupom agora.");
     } finally {
       setLoading(false);
     }
