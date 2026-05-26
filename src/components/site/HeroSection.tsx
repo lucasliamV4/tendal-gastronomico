@@ -42,11 +42,11 @@ const HeroSection = () => {
 
       <div className="container relative mx-auto px-4 py-20 md:py-28">
         <div className="max-w-2xl">
-          <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-wide">
+          <span className="inline-flex max-w-full items-center whitespace-nowrap overflow-hidden text-ellipsis rounded-full bg-white/10 px-3 py-1 text-[11px] sm:text-xs font-medium uppercase tracking-wide">
             {reference}
           </span>
 
-          <h1 className="mt-4 break-words font-heading text-3xl font-bold leading-tight sm:text-4xl md:text-5xl lg:text-6xl">
+          <h1 className="mt-4 break-words font-heading text-4xl font-bold leading-tight sm:text-5xl md:text-5xl lg:text-6xl">
             Almoco de verdade na Lapa: brasa, ambiente arborizado e chopp artesanal proprio.
           </h1>
 

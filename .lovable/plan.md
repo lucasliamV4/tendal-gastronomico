@@ -1,44 +1,38 @@
-Plano de configuracao das tags de SEO para a landing page do Tendal Gastronomia.
+Revisão da versão mobile (390px) da landing do Tendal. Naveguei pelo preview e identifiquei os ajustes abaixo.
 
-O que ja existe:
-- `src/routes/__root.tsx` possui tags meta basicas (title, description, OG, twitter) no root
-- `src/routes/index.tsx` (landing page) NAO possui `head()` configurado
-- `lang="en"` no HTML — deve ser `pt-BR`
-- Nao existe `robots.txt` nem `sitemap.xml`
-- Nao existe JSON-LD estruturado
-- `twitter:site` aponta para `@Lovable`
+## Problemas encontrados
 
-### Tarefas
+### 1. Header (`src/components/site/Header.tsx`)
+- **Logo gigante**: `h-16 md:h-20` ocupa quase metade da altura do header no mobile, espremendo o botão WhatsApp.
+- **Navegação sumida**: o `<nav>` está `hidden md:flex`. No mobile não existe menu hambúrguer — usuário não consegue pular para Cardápio, Cupom, Como chegar, etc.
 
-1. **Corrigir idioma e defaults no `__root.tsx`**
-   - Alterar `lang="en"` para `lang="pt-BR"`
-   - Manter no root apenas meta tags globais (charset, viewport, og:type, twitter:card)
-   - Remover title/description especificos do root (deixar para a rota filha)
-   - Corrigir `twitter:site` se houver identidade do restaurante; senao, remover
+### 2. FooterCTA (`src/components/site/FooterCTA.tsx`)
+- Logo `h-32 md:h-40` (128px) é exagerada no mobile, empurra o conteúdo principal para baixo.
 
-2. **Adicionar `head()` ao `src/routes/index.tsx`**
-   - `title`: titulo otimizado para a landing page
-   - `name="description"`: descricao com palavras-chave de restaurante/almoco/Lapa
-   - `property="og:title"` / `og:description"` / `og:type"` / `og:url"` / `og:image"`
-   - `name="twitter:card"` / `twitter:title"` / `twitter:description"` / `twitter:image"`
-   - `link rel="canonical"` com URL relativa "/"
-   - `script type="application/ld+json"` com schema Restaurant (nome, endereco, horario, telefone, imagem)
+### 3. CardapioSection (`src/components/site/CardapioSection.tsx`)
+- Existe um `<div className="mx-auto max-w-2xl text-center">` **vazio** logo no topo da seção (linhas 20–22) gerando espaço morto.
+- Não há um título de seção “Cardápio” acima — só aparece o H3 "O PRATO NOSSO DE CADA DIA...".
 
-3. **Criar `public/robots.txt`**
-   - Permitir crawl em todas as rotas
-   - Apontar sitemap
+### 4. WhatsAppWidget (`src/components/site/WhatsAppWidget.tsx`)
+- Botão flutuante fixo em `bottom-5 right-5` sobrepõe o botão verde "Pedir pelo WhatsApp" no cardápio e os CTAs do footer no mobile.
+- Sem `padding-bottom` no `<main>` para compensar.
 
-4. **Criar `public/sitemap.xml`**
-   - URL da home com lastmod e prioridade 1.0
+### 5. Hero (`src/components/site/HeroSection.tsx`)
+- O badge "60 METROS DO POUPA TEMPO LAPA" quebra em duas linhas. Pode usar `whitespace-nowrap` ou texto mais curto no mobile.
+- H1 com `break-words` ok, mas o tamanho `text-3xl sm:text-4xl` pode ser ajustado para `text-4xl` no mobile para mais impacto.
 
-5. **Verificar imagem para OG**
-   - Existe `/images/hero.png` que pode ser usada como og:image
-   - Usar caminho absoluto relativo para og:image (o crawler resolve)
+### 6. ComoChegarSection (`src/components/site/ComoChegarSection.tsx`)
+- O mapa do Google fica vazio/branco no preview mobile (visualmente é um grande bloco em branco entre "Abrir no Google Maps" e o footer). Vou validar se o iframe está carregando ou se precisa de fallback.
 
-### Detalhes tecnicos
-- Seguir o padrao TanStack Start: `head()` retorna `{ meta, links, scripts }`
-- Title eh meta entry: `{ title: "..." }`
-- Canonical vive em links: `[{ rel: "canonical", href: "/" }]`
-- JSON-LD em scripts: `[{ type: "application/ld+json", children: JSON.stringify(...) }]`
-- OG image usar path absoluto: `https://...` se possivel, senao relativo "/images/hero.png"
-- Como o projeto ainda nao tem custom domain, og:url e canonical usam paths relativos
+## Tarefas
+
+1. **Header**: reduzir logo para `h-10 md:h-14`, adicionar menu hambúrguer mobile (sheet/drawer simples) com os links de seção.
+2. **FooterCTA**: reduzir logo para `h-20 md:h-32`.
+3. **CardapioSection**: remover o div vazio, adicionar título "Nosso Cardápio" + subtítulo curto no padrão das outras seções.
+4. **WhatsAppWidget**: ocultar widget flutuante quando o footer estiver visível (intersection observer) **ou** mais simples — adicionar `pb-24` no `<main>` para que o widget nunca cubra CTA. Vou pela solução simples.
+5. **Hero**: badge com `whitespace-nowrap` e padding reduzido; aumentar H1 mobile para `text-4xl`.
+6. **ComoChegar**: confirmar que iframe carrega; senão, manter mas garantir altura mínima razoável e adicionar um link "Abrir mapa" como fallback (já existe).
+
+## Fora de escopo
+- Não vou mexer em paleta de cores, tipografia ou backend.
+- Não vou alterar a Testemunhos / FAQ (já retornam `null` quando sem dados — comportamento correto).

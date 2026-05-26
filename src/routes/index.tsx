@@ -82,7 +82,7 @@ function Index() {
     <div className="min-h-screen bg-background">
       <UrgentBanner />
       <Header />
-      <main>
+      <main className="pb-20 md:pb-0">
         <HeroSection />
         <DiferenciaisSection />
         <CardapioSection />

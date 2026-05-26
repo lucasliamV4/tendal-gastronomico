@@ -30,7 +30,7 @@ const FooterCTA = () => {
             <img
               src={logo?.url || logoTendal}
               alt={logo?.alt_text || config?.business_name || "Tendal Gastronomia"}
-              className="h-32 md:h-40 w-auto"
+              className="h-20 md:h-32 w-auto"
             />
           </div>
           <h2 className="font-heading text-3xl font-bold md:text-4xl">
