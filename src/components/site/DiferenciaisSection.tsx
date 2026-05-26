@@ -12,22 +12,22 @@ const DIFFERENTIALS: Differential[] = [
     imageSlot: "charbroiler.png",
     title: "Carne grelhada na brasa",
     description:
-      "Contrafile Ancho, bisteca, linguicas artesanais. Tudo no charbroiler - a mesma brasa do churrasco gaucho. Nada de chapa, nada de pressa.",
+      "Contrafilé Ancho, bisteca, linguiças artesanais. Tudo no charbroiler — a mesma brasa do churrasco gaúcho. Nada de chapa, nada de pressa.",
     badge: "Charbroiler",
   },
   {
     imageSlot: "ambiente.jpg",
-    title: "Patio arborizado, fora do barulho da rua",
+    title: "Pátio arborizado, fora do barulho da rua",
     description:
       "Um quintal verde dentro do Centro Cultural. Almoço sem buzina, com sombra de árvore e segurança monitorada. Pausa de verdade.",
-    badge: "Refugio urbano",
+    badge: "Refúgio urbano",
   },
   {
     imageSlot: "logo_tria.jpg",
-    title: "Chopp artesanal proprio",
+    title: "Chopp artesanal próprio",
     description:
-      "O chopp servido aqui sai da nossa propria cervejaria. Frescor garantido, e voce so vai encontrar nesse endereco.",
-    badge: "Cervejaria propria",
+      "O chopp servido aqui sai da nossa própria cervejaria. Frescor garantido, e você só vai encontrar nesse endereço.",
+    badge: "Cervejaria própria",
   },
 ];
 
