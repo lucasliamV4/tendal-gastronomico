@@ -84,7 +84,7 @@ const HeroSection = () => {
           </div>
 
           <p className="mt-8 text-xs uppercase tracking-wide text-white/65">
-            Almoco de segunda a sexta · 11h30 as 15h
+            Almoço de segunda a sexta · 11h30 às 15h
           </p>
         </div>
       </div>
