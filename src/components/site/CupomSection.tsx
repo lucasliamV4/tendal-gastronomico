@@ -40,13 +40,13 @@ const CupomSection = () => {
           {issuedCode ? (
             <div className="mt-8 rounded-lg border-2 border-dashed border-primary bg-primary/10 p-6">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Seu codigo de cupom
+                Seu código de cupom
               </p>
               <p className="mt-2 font-mono text-2xl sm:text-3xl font-bold tracking-widest text-primary break-all">
                 {issuedCode}
               </p>
               <p className="mt-3 text-xs text-muted-foreground">
-                Mostre esse codigo ao garcom no momento do pedido. O WhatsApp ja foi aberto em outra
+                Mostre esse código ao garçom no momento do pedido. O WhatsApp já foi aberto em outra
                 aba.
               </p>
             </div>
