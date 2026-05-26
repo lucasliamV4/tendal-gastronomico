@@ -18,9 +18,9 @@ const CardapioSection = () => {
     <section id="cardapio" className="bg-white py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-heading text-3xl font-bold md:text-4xl">Nosso cardapio</h2>
+          <h2 className="font-heading text-3xl font-bold md:text-4xl">Nosso cardápio</h2>
           <p className="mt-3 text-lg text-muted-foreground">
-            Escolha sua proteina e monte o prato perfeito.
+            Escolha sua proteína e monte o prato perfeito.
           </p>
         </div>
 

@@ -6,7 +6,7 @@ const TestemunhosSection = () => {
     <section id="testemunhos" className="bg-secondary/30 py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-heading text-3xl font-bold md:text-4xl">Quem ja foi</h2>
+          <h2 className="font-heading text-3xl font-bold md:text-4xl">Quem já foi</h2>
           <p className="mt-3 text-lg text-muted-foreground">O que os clientes falam.</p>
         </div>
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">

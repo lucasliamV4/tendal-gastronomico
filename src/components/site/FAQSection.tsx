@@ -13,7 +13,7 @@ const FAQSection = () => {
       <div className="container mx-auto max-w-3xl px-4">
         <div className="text-center">
           <h2 className="font-heading text-3xl font-bold md:text-4xl">Perguntas frequentes</h2>
-          <p className="mt-3 text-lg text-muted-foreground">Duvidas comuns sobre o Tendal.</p>
+          <p className="mt-3 text-lg text-muted-foreground">Dúvidas comuns sobre o Tendal.</p>
         </div>
         <Accordion type="single" collapsible className="mt-10">
           {faqs.map((item) => (

@@ -12,22 +12,22 @@ const DIFFERENTIALS: Differential[] = [
     imageSlot: "charbroiler.png",
     title: "Carne grelhada na brasa",
     description:
-      "Contrafile Ancho, bisteca, linguicas artesanais. Tudo no charbroiler - a mesma brasa do churrasco gaucho. Nada de chapa, nada de pressa.",
+      "Contrafilé Ancho, bisteca, linguiças artesanais. Tudo no charbroiler — a mesma brasa do churrasco gaúcho. Nada de chapa, nada de pressa.",
     badge: "Charbroiler",
   },
   {
     imageSlot: "ambiente.jpg",
-    title: "Patio arborizado, fora do barulho da rua",
+    title: "Pátio arborizado, fora do barulho da rua",
     description:
       "Um quintal verde dentro do Centro Cultural. Almoço sem buzina, com sombra de árvore e segurança monitorada. Pausa de verdade.",
-    badge: "Refugio urbano",
+    badge: "Refúgio urbano",
   },
   {
     imageSlot: "logo_tria.jpg",
-    title: "Chopp artesanal proprio",
+    title: "Chopp artesanal próprio",
     description:
-      "O chopp servido aqui sai da nossa propria cervejaria. Frescor garantido, e voce so vai encontrar nesse endereco.",
-    badge: "Cervejaria propria",
+      "O chopp servido aqui sai da nossa própria cervejaria. Frescor garantido, e você só vai encontrar nesse endereço.",
+    badge: "Cervejaria própria",
   },
 ];
 
@@ -37,10 +37,10 @@ const DiferenciaisSection = () => (
       <div className="mx-auto max-w-2xl text-center">
         <h2 className="font-heading text-3xl font-bold md:text-4xl">O que nos diferencia</h2>
         <p className="mt-3 text-lg text-muted-foreground">
-          Nao competimos por preco - competimos por experiencia.
+          Não competimos por preço — competimos por experiência.
         </p>
         <p className="mt-2 text-sm text-muted-foreground">
-          Na regiao da Lapa tem 15 lugares vendendo PF a R$ 17. Nenhum entrega o que voce vai
+          Na região da Lapa tem 15 lugares vendendo PF a R$ 17. Nenhum entrega o que você vai
           encontrar aqui.
         </p>
       </div>

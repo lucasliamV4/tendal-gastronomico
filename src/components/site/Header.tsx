@@ -3,7 +3,7 @@ import { useSiteConfig } from "@/contexts/SiteConfigContext";
 import { useSiteImage } from "@/hooks/useSupabaseQueries";
 
 const NAV_LINKS = [
-  { href: "#cardapio", label: "Cardapio" },
+  { href: "#cardapio", label: "Cardápio" },
   { href: "#cupom", label: "Cupom" },
   { href: "#como-chegar", label: "Como chegar" },
   { href: "#testemunhos", label: "Testemunhos" },
@@ -27,7 +27,7 @@ const Header = () => {
         </a>
 
         <nav
-          aria-label="Secoes do site"
+          aria-label="Seções do site"
           className="hidden items-center gap-6 text-sm text-white/80 md:flex"
         >
           {NAV_LINKS.map((l) => (

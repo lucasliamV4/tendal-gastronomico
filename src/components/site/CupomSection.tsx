@@ -19,9 +19,9 @@ const CupomSection = () => {
         promotionId: promotion.id,
       });
       setIssuedCode(code);
-      toast.success("Cupom gerado!", { description: `Mostre o codigo ${code} ao garcom.` });
+      toast.success("Cupom gerado!", { description: `Mostre o código ${code} ao garçom.` });
     } catch {
-      toast.error("Nao foi possivel gerar o cupom agora.");
+      toast.error("Não foi possível gerar o cupom agora.");
     } finally {
       setLoading(false);
     }
@@ -32,7 +32,7 @@ const CupomSection = () => {
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-2xl rounded-2xl border bg-card p-8 text-center shadow-sm md:p-12">
           <span className="inline-flex items-center rounded-full bg-primary px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary-foreground">
-            {promotion.badge_text || "Promocao ativa"}
+            {promotion.badge_text || "Promoção ativa"}
           </span>
           <h2 className="mt-4 font-heading text-3xl font-bold md:text-4xl">{promotion.headline}</h2>
           <p className="mt-4 text-lg text-muted-foreground">{promotion.description}</p>
@@ -40,13 +40,13 @@ const CupomSection = () => {
           {issuedCode ? (
             <div className="mt-8 rounded-lg border-2 border-dashed border-primary bg-primary/10 p-6">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Seu codigo de cupom
+                Seu código de cupom
               </p>
               <p className="mt-2 font-mono text-2xl sm:text-3xl font-bold tracking-widest text-primary break-all">
                 {issuedCode}
               </p>
               <p className="mt-3 text-xs text-muted-foreground">
-                Mostre esse codigo ao garcom no momento do pedido. O WhatsApp ja foi aberto em outra
+                Mostre esse código ao garçom no momento do pedido. O WhatsApp já foi aberto em outra
                 aba.
               </p>
             </div>
