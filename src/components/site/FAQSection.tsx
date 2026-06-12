@@ -7,9 +7,24 @@ import {
 
 const faqs = [
   {
+    id: "onde-fica",
+    question: "Onde fica o Tendal Gastronomia?",
+    answer: "Estamos dentro do Centro Cultural Tendal da Lapa, na Rua Guaicurus, 1100 - Lapa. A entrada fica recuada cerca de 60 metros da rua, atravessando o portão do Centro Cultural."
+  },
+  {
+    id: "horario",
+    question: "Qual o horário de almoço?",
+    answer: "De segunda a sexta-feira, das 11h30 às 15h."
+  },
+  {
     id: "estacionamento",
     question: "Tem estacionamento?",
     answer: "Não. O estacionamento interno do Tendal da Lapa não está disponível para clientes."
+  },
+  {
+    id: "cartao-pix",
+    question: "Aceitam cartão e Pix?",
+    answer: "Sim, aceitamos todos os cartões de crédito e débito, Pix e dinheiro."
   },
   {
     id: "vale-refeicao",
@@ -17,10 +32,20 @@ const faqs = [
     answer: "No momento não aceitamos, mas estamos avaliando essa possibilidade."
   },
   {
+    id: "vegetariana",
+    question: "Tem opção vegetariana?",
+    answer: "Sim, temos pelo menos uma opção vegetariana no PF de cada dia. Pergunte ao atendente sobre o cardápio do dia."
+  },
+  {
     id: "promocao",
     question: "Como funciona a promoção para funcionários da região?",
     answer: "Funcionários do Poupatempo, JUCESP e Subprefeitura recebem um refrigerante pequeno grátis na compra do almoço mediante apresentação do crachá funcional."
-  }
+  },
+  {
+    id: "reserva",
+    question: "Posso fazer reserva?",
+    answer: "No almoço a casa funciona por ordem de chegada, sem reservas."
+  },
 ];
 
 const FAQSection = () => {
