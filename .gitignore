@@ -36,3 +36,4 @@ ci-artifacts/
 .env
 .env.*
 !.env.example
+.vercel
