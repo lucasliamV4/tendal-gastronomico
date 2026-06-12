@@ -8,8 +8,20 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
-    "lint": "eslint .",
-    "format": "prettier --write ."
+    "typecheck": "tsc --noEmit",
+    "typecheck:fresh": "rm -rf node_modules/.vite node_modules/.cache .tsbuildinfo && bun run routes:generate && tsc --noEmit",
+    "routes:generate": "tsr generate",
+    "routes:check": "tsr generate && git diff --exit-code src/routeTree.gen.ts",
+    "check:imports": "node scripts/check-alias-imports.mjs",
+    "check:imports:watch": "node scripts/check-alias-imports.mjs --watch",
+    "prebuild": "node scripts/check-alias-imports.mjs && bun run routes:generate",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix --max-warnings=0",
+    "validate": "bun run check:imports && bun run lint && bun run typecheck && bun run build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.25.5",
@@ -40,7 +52,7 @@
     "@radix-ui/react-toggle": "^1.1.10",
     "@radix-ui/react-toggle-group": "^1.1.11",
     "@radix-ui/react-tooltip": "^1.2.8",
-    "@supabase/supabase-js": "^2.106.2",
+    "@supabase/supabase-js": "^2.105.4",
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-query": "^5.83.0",
     "@tanstack/react-router": "^1.168.25",
@@ -53,7 +65,6 @@
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.575.0",
-    "nitro": "3.0.260603-beta",
     "react": "^19.2.0",
     "react-day-picker": "^9.14.0",
     "react-dom": "^19.2.0",
@@ -70,7 +81,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
-    "@lovable.dev/vite-tanstack-config": "2.3.2",
+    "@lovable.dev/vite-tanstack-config": "^1.5.1",
+    "@tanstack/router-cli": "^1.166.43",
     "@types/node": "^22.16.5",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
@@ -82,8 +94,10 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^15.15.0",
     "prettier": "^3.7.3",
+    "prettier-plugin-organize-imports": "^4.3.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vitest": "^4.1.6"
   }
 }

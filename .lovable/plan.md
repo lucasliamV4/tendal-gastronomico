@@ -1,50 +1,165 @@
-## Revisão ortográfica do português
+## Diagnóstico
 
-Vou corrigir os textos hardcoded com acentos/cedilhas faltando. Strings vindas do banco (FAQ, depoimentos, cardápio, promoção, banner urgente, config do site) não são tocadas — são editáveis pelo admin.
+Hoje todo o CI roda em **um único job** chamado `pre-publish-checks`. No GitHub, branch protection só consegue exigir _status checks_ por **nome de job** (ou nome de check externo) — não por step. Resultado: o máximo que dá para exigir hoje é "o job inteiro tem que passar". Não dá para dizer "merge bloqueia se `typecheck` falhar mas pode passar mesmo se `lint` falhar", nem expor "alias check" como check independente no painel do PR.
 
-### `src/components/site/Header.tsx`
-- "Cardapio" → "Cardápio"
-- "Secoes do site" → "Seções do site"
+Além disso, branch protection é **configuração do repositório no GitHub**, não vive em arquivos versionados — precisa ser ativada via UI ou API. Posso:
 
-### `src/components/site/HeroSection.tsx`
-- Já corrigido anteriormente. Manter.
+1. Refatorar o CI para que cada check vire um job/status separado, addressable por nome.
+2. Documentar e fornecer o comando exato para o usuário ligar a branch protection no GitHub (eu não tenho permissão de admin no repo dele).
 
-### `src/components/site/DiferenciaisSection.tsx`
-- "Contrafile Ancho, bisteca, linguicas artesanais. Tudo no charbroiler - a mesma brasa do churrasco gaucho." → "Contrafilé Ancho, bisteca, linguiças artesanais. Tudo no charbroiler — a mesma brasa do churrasco gaúcho."
-- "Patio arborizado, fora do barulho da rua" → "Pátio arborizado, fora do barulho da rua"
-- "Refugio urbano" → "Refúgio urbano"
-- "Chopp artesanal proprio" → "Chopp artesanal próprio"
-- "O chopp servido aqui sai da nossa propria cervejaria. Frescor garantido, e voce so vai encontrar nesse endereco." → "O chopp servido aqui sai da nossa própria cervejaria. Frescor garantido, e você só vai encontrar nesse endereço."
-- "Cervejaria propria" → "Cervejaria própria"
-- "Nao competimos por preco - competimos por experiencia." → "Não competimos por preço — competimos por experiência."
-- "Na regiao da Lapa tem 15 lugares vendendo PF a R$ 17. Nenhum entrega o que voce vai encontrar aqui." → "Na região da Lapa tem 15 lugares vendendo PF a R$ 17. Nenhum entrega o que você vai encontrar aqui."
+## Plano
 
-### `src/components/site/CardapioSection.tsx`
-- "Nosso cardapio" → "Nosso cardápio"
-- "Escolha sua proteina e monte o prato perfeito." → "Escolha sua proteína e monte o prato perfeito."
+### 1. Refatorar `.github/workflows/ci.yml` em jobs paralelos
 
-### `src/components/site/CupomSection.tsx`
-- "Mostre o codigo ${code} ao garcom." → "Mostre o código ${code} ao garçom."
-- "Nao foi possivel gerar o cupom agora." → "Não foi possível gerar o cupom agora."
-- "Promocao ativa" → "Promoção ativa"
-- "Seu codigo de cupom" → "Seu código de cupom"
-- "Mostre esse codigo ao garcom no momento do pedido. O WhatsApp ja foi aberto em outra aba." → "Mostre esse código ao garçom no momento do pedido. O WhatsApp já foi aberto em outra aba."
+Cada check vira um job independente — aparece como status check separado no PR e pode ser exigido individualmente via branch protection.
 
-### `src/components/site/ComoChegarSection.tsx`
-- "A {reference}, num quintal que voce nao imagina que existe." → "A {reference}, num quintal que você não imagina que existe."
-- "Endereco" → "Endereço"
-- Defaults: "Sao Paulo" → "São Paulo" (apenas no fallback do JSX)
+Para evitar reinstalar dependências em cada job, uso uma **composite action local** em `.github/actions/setup/action.yml` que faz checkout + setup-bun + install + cache. Cada job invoca essa action.
 
-### `src/components/site/TestemunhosSection.tsx`
-- "Quem ja foi" → "Quem já foi"
+```text
+.github/
+  actions/setup/action.yml      ← composite (checkout + bun + install + cache)
+  workflows/ci.yml              ← jobs paralelos, cada um um check
+```
 
-### `src/components/site/FAQSection.tsx`
-- "Duvidas comuns sobre o Tendal." → "Dúvidas comuns sobre o Tendal."
+Estrutura final do `ci.yml`:
 
-### `src/components/site/FooterCTA.tsx`
-- "Bate o ponto, atravessa a rua e vem almocar." → "Bate o ponto, atravessa a rua e vem almoçar."
-- "Brasa acesa de segunda a sexta, 11h30 as 15h." → "Brasa acesa de segunda a sexta, 11h30 às 15h."
-- Fallback "Sao Paulo" → "São Paulo"
+```yaml
+jobs:
+  alias-check:
+    name: Alias imports check # ← nome que aparece no PR
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+      - run: bun run check:imports 2>&1 | tee ci-artifacts/check-imports.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: alias-check-logs, path: ci-artifacts/ }
 
-### Não alterado
-- `UrgentBanner`, `WhatsAppWidget`, `FAQSection` (conteúdo de banco), `TestemunhosSection` (conteúdo de banco), strings de tracking (`source: "como_chegar_button"` etc — são identificadores internos).
+  routes-check:
+    name: Route tree drift check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+      - run: bun run routes:generate
+      - run: git diff --exit-code src/routeTree.gen.ts
+
+  format-check:
+    name: Format check (Prettier)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+      - run: bun run format:check 2>&1 | tee ci-artifacts/format-check.log
+      - upload-artifact: ...
+
+  typecheck:
+    name: Typecheck (tsc --noEmit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+      - run: bun run routes:generate # tsc precisa do tree
+      - run: bun run typecheck:fresh 2>&1 | tee ci-artifacts/typecheck.log
+      - upload-artifact: ...
+
+  lint:
+    name: Lint (ESLint)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+      - run: bunx eslint . --max-warnings=0 --format json --output-file ci-artifacts/eslint.json 2>&1 | tee ci-artifacts/lint.log
+      - upload-artifact: ...
+```
+
+Vantagens:
+
+- Cada job tem nome estável (`Alias imports check`, `Typecheck (tsc --noEmit)`, etc.) — viram status checks individuais no PR.
+- Jobs rodam em paralelo → tempo total cai.
+- Falha em um job não impede os outros de rodar (dev vê todos os erros de uma vez).
+- `routes-check` é separado para o caso "alguém esqueceu de commitar `routeTree.gen.ts`" ficar como falha distinta de typecheck.
+
+### 2. Composite action `setup`
+
+`.github/actions/setup/action.yml`:
+
+```yaml
+name: Setup project
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+    - uses: oven-sh/setup-bun@v2
+      with: { bun-version: latest }
+    - run: bun install --frozen-lockfile
+      shell: bash
+    - run: mkdir -p ci-artifacts
+      shell: bash
+```
+
+`setup-bun@v2` já cacheia o store do Bun automaticamente — não precisa de `actions/cache` extra.
+
+### 3. Documentar como exigir os checks no GitHub
+
+Criar `.github/BRANCH_PROTECTION.md` com instruções claras (UI + CLI) para o usuário ligar a regra. Eu não posso fazer isso pelo lado do código — é setting do repositório.
+
+**Conteúdo principal:**
+
+#### Opção A — UI do GitHub (recomendado)
+
+1. Abrir o repo → **Settings → Branches → Add branch protection rule**
+2. Branch name pattern: `main` (ou o branch default)
+3. Marcar **Require a pull request before merging**
+4. Marcar **Require status checks to pass before merging**
+5. Marcar **Require branches to be up to date before merging**
+6. Em **Status checks that are required**, buscar e adicionar:
+   - `Alias imports check`
+   - `Typecheck (tsc --noEmit)`
+   - (opcional) `Format check (Prettier)`, `Lint (ESLint)`, `Route tree drift check`
+7. Salvar.
+
+> Os nomes só aparecem no buscador depois que o CI rodou ao menos uma vez no branch. Se não aparecerem, abrir um PR de teste primeiro.
+
+#### Opção B — `gh` CLI (reproduzível)
+
+```bash
+gh api -X PUT repos/<OWNER>/<REPO>/branches/main/protection \
+  -H "Accept: application/vnd.github+json" \
+  -f required_status_checks.strict=true \
+  -f 'required_status_checks.contexts[]=Alias imports check' \
+  -f 'required_status_checks.contexts[]=Typecheck (tsc --noEmit)' \
+  -f 'required_status_checks.contexts[]=Format check (Prettier)' \
+  -f 'required_status_checks.contexts[]=Lint (ESLint)' \
+  -f 'required_status_checks.contexts[]=Route tree drift check' \
+  -F enforce_admins=true \
+  -F required_pull_request_reviews=null \
+  -F restrictions=null
+```
+
+#### Opção C — Repository ruleset (GitHub novo)
+
+Settings → Rules → Rulesets → New branch ruleset → mesmas opções da UI clássica, com a vantagem de aplicar a múltiplos branches via pattern.
+
+### 4. Validação local
+
+Não dá para validar branch protection sem subir para o GitHub e ter alguém com admin. O que valida:
+
+```bash
+# o yaml é válido?
+bunx --bun yaml-lint .github/workflows/ci.yml
+# os scripts referenciados existem?
+bun run check:imports && bun run format:check && bun run lint && bun run typecheck:fresh
+```
+
+E após o primeiro push: confirmar no GitHub que os 5 checks aparecem como linhas separadas no painel "Checks" do PR.
+
+## Resultado
+
+- 5 status checks independentes no GitHub: `Alias imports check`, `Route tree drift check`, `Format check (Prettier)`, `Typecheck (tsc --noEmit)`, `Lint (ESLint)`.
+- Branch protection pode exigir qualquer combinação deles (o pedido específico — typecheck + alias check — fica trivial).
+- Documentação reproduzível dentro do repo (`BRANCH_PROTECTION.md`) com UI + CLI.
+- Jobs paralelos = CI mais rápido + erros mostrados todos juntos.
+
+## Fora de escopo
+
+- Ativar a regra no GitHub: o usuário precisa fazer (eu não tenho permissão).
+- CODEOWNERS / required reviewers: pedido só falou de status checks.
+- Auto-merge bot (Mergify, Kodiak): não foi pedido.
+- Pre-commit hooks locais (Husky): branch protection no servidor já cobre o gating.

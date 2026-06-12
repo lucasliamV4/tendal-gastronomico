@@ -3,11 +3,14 @@ import { useMenuItems, useSiteImages } from "@/hooks/useSupabaseQueries";
 import { formatBRL } from "@/lib/format";
 
 const proteins = [
-  { id: 'contra-file', name: 'Contra-Filé', thumb: '/images/scroll_contra_file.png', plate: '/images/plate_contra_file.png' },
-  { id: 'file-frango', name: 'Filé de Frango', thumb: '/images/scroll_file_frango.png', plate: '/images/plate_file_frango.png' },
-  { id: 'bisteca', name: 'Bisteca Suína', thumb: '/images/scroll_bisteca.png', plate: '/images/plate_bisteca.png' },
-  { id: 'calabresa', name: 'Calabresa', thumb: '/images/scroll_calabresa.png', plate: '/images/plate_calabresa.png' },
-  { id: 'omelete', name: 'Omelete', thumb: '/images/scroll_omelete.png', plate: '/images/plate_omelete.png' }
+  { id: 'espetinho-carne', name: 'Espetinho de Carne', price: 'R$ 29,90', thumb: '/images/scroll_espetinho_carne.png', plate: '/images/plate_espetinho_carne.png' },
+  { id: 'espetinho-frango', name: 'Espetinho de Frango', price: 'R$ 26,90', thumb: '/images/scroll_espetinho_frango.png', plate: '/images/plate_espetinho_frango.png' },
+  { id: 'espetinho-misto', name: 'Espetinho Misto', price: 'R$ 28,90', thumb: '/images/scroll_espetinho_misto.png', plate: '/images/plate_espetinho_misto.png' },
+  { id: 'espetinho-linguica', name: 'Espetinho de Linguiça', price: 'R$ 26,90', thumb: '/images/scroll_espetinho_linguica.png', plate: '/images/plate_espetinho_linguica.png' },
+  { id: 'file-frango', name: 'Filé de Frango', price: 'R$ 27,90', thumb: '/images/scroll_file_frango.png', plate: '/images/plate_file_frango.png' },
+  { id: 'contra-file', name: 'Contra-Filé', price: 'R$ 34,90', thumb: '/images/scroll_contra_file.png', plate: '/images/plate_contra_file.png' },
+  { id: 'bisteca', name: 'Bisteca Suína', price: 'R$ 28,90', thumb: '/images/scroll_bisteca.png', plate: '/images/plate_bisteca.png' },
+  { id: 'calabresa', name: 'Calabresa', price: 'R$ 26,90', thumb: '/images/scroll_calabresa.png', plate: '/images/plate_calabresa.png' }
 ];
 
 const CardapioSection = () => {
@@ -18,10 +21,7 @@ const CardapioSection = () => {
     <section id="cardapio" className="bg-white py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-heading text-3xl font-bold md:text-4xl">Nosso cardápio</h2>
-          <p className="mt-3 text-lg text-muted-foreground">
-            Escolha sua proteína e monte o prato perfeito.
-          </p>
+          
         </div>
 
         <div className="mt-12 flex flex-col lg:flex-row gap-12 lg:gap-16 items-start lg:items-center">
@@ -31,11 +31,7 @@ const CardapioSection = () => {
             <div className="aspect-square w-full rounded-2xl overflow-hidden bg-muted shadow-md">
               <img 
                 src={selectedProtein.plate} 
-                alt={selectedProtein.name}
-                width={900}
-                height={900}
-                loading="lazy"
-                decoding="async"
+                alt={selectedProtein.name} 
                 className="h-full w-full object-cover transition-opacity duration-500" 
               />
             </div>
@@ -52,11 +48,7 @@ const CardapioSection = () => {
                 >
                   <img 
                     src={p.thumb} 
-                    alt={p.name}
-                    width={200}
-                    height={200}
-                    loading="lazy"
-                    decoding="async"
+                    alt={p.name} 
                     className="h-full w-full object-cover bg-white" 
                   />
                 </button>
@@ -67,7 +59,7 @@ const CardapioSection = () => {
           {/* Lado Direito: Copy / CTA */}
           <div className="w-full lg:w-7/12 flex flex-col gap-6 lg:py-8">
             <h3 className="font-heading text-3xl md:text-4xl font-black uppercase text-foreground leading-tight tracking-tight">
-              O PRATO NOSSO DE CADA DIA...
+              {selectedProtein.name} <span className="text-primary">{selectedProtein.price}</span>
             </h3>
             
             <p className="text-lg text-muted-foreground leading-relaxed">

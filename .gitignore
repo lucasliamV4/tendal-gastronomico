@@ -30,3 +30,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+ci-artifacts/
+
+# Environment variables
+.env
+.env.*
+!.env.example

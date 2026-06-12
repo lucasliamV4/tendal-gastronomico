@@ -1,0 +1,129 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  alias-check:
+    name: Alias imports check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Run check:imports
+        run: |
+          set -o pipefail
+          bun run check:imports 2>&1 | tee ci-artifacts/check-imports.log
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: alias-check-logs-${{ github.run_attempt }}
+          path: ci-artifacts/
+          if-no-files-found: warn
+          retention-days: 14
+
+  routes-check:
+    name: Route tree drift check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Generate route tree
+        run: |
+          set -o pipefail
+          bun run routes:generate 2>&1 | tee ci-artifacts/routes-generate.log
+      - name: Verify routeTree.gen.ts is committed up-to-date
+        run: |
+          set -o pipefail
+          git diff --exit-code src/routeTree.gen.ts 2>&1 | tee ci-artifacts/routes-drift.log
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: routes-check-logs-${{ github.run_attempt }}
+          path: ci-artifacts/
+          if-no-files-found: warn
+          retention-days: 14
+
+  format-check:
+    name: Format check (Prettier)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Prettier --check
+        run: |
+          set -o pipefail
+          bun run format:check 2>&1 | tee ci-artifacts/format-check.log
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: format-check-logs-${{ github.run_attempt }}
+          path: ci-artifacts/
+          if-no-files-found: warn
+          retention-days: 14
+
+  typecheck:
+    name: Typecheck (tsc --noEmit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Validate tsconfig @ alias
+        run: |
+          node -e "
+          const cfg = JSON.parse(require('fs').readFileSync('tsconfig.json','utf8'));
+          const paths = cfg.compilerOptions && cfg.compilerOptions.paths;
+          const ok = paths && Array.isArray(paths['@/*']) && paths['@/*'][0] === './src/*';
+          if (!ok) { console.error('✖ tsconfig.json paths[\"@/*\"] deve ser [\"./src/*\"]'); process.exit(1); }
+          console.log('✓ tsconfig paths OK');
+          " 2>&1 | tee ci-artifacts/tsconfig-paths.log
+      - name: Typecheck (fresh, generates routeTree)
+        run: |
+          set -o pipefail
+          bun run typecheck:fresh 2>&1 | tee ci-artifacts/typecheck.log
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: typecheck-logs-${{ github.run_attempt }}
+          path: ci-artifacts/
+          if-no-files-found: warn
+          retention-days: 14
+
+  lint:
+    name: Lint (ESLint)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: ESLint
+        run: |
+          set -o pipefail
+          bunx eslint . --max-warnings=0 \
+            --format json --output-file ci-artifacts/eslint-report.json 2>&1 \
+            | tee ci-artifacts/lint.log
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-logs-${{ github.run_attempt }}
+          path: ci-artifacts/
+          if-no-files-found: warn
+          retention-days: 14
+
+  unit-tests:
+    name: Unit tests (Vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Vitest
+        run: |
+          set -o pipefail
+          bun run test 2>&1 | tee ci-artifacts/vitest.log
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-tests-logs-${{ github.run_attempt }}
+          path: ci-artifacts/
+          if-no-files-found: warn
+          retention-days: 14
