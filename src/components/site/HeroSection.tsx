@@ -12,11 +12,23 @@ const HeroSection = () => {
   const reference = config?.reference_distance ?? "60 metros do Poupa Tempo Lapa";
 
   const handleRedeem = async () => {
-    await redeemCoupon({
+    console.log("Iniciando resgate de cupom...", {
       source: "hero_redeem",
       template: promotion?.whatsapp_message_template,
-      promotionId: promotion?.id ?? null,
+      promotionId: promotion?.id,
+      promotion
     });
+    
+    try {
+      const code = await redeemCoupon({
+        source: "hero_redeem",
+        template: promotion?.whatsapp_message_template,
+        promotionId: promotion?.id ?? null,
+      });
+      console.log("Cupom resgatado com sucesso:", code);
+    } catch (error) {
+      console.error("Erro ao resgatar cupom:", error);
+    }
   };
 
   const handleSeeMap = () => {
