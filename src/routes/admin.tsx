@@ -8,6 +8,7 @@ import {
   useSiteConfigData,
   useUpdateSiteConfig,
 } from "@/hooks/useSupabaseQueries";
+import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -54,13 +55,28 @@ function AdminPage() {
   const [activeTab, setActiveTab] = useState<TabId>("cardapio");
   const uploadTimestamps = useRef<number[]>([]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "tendal2026") {
-      setIsAuthenticated(true);
+    setIsLoggingIn(true);
+    
+    // Fallback/simplificação: ainda aceitamos a senha fixa para facilitar,
+    // MAS precisamos fazer o login real no Supabase por trás dos panos
+    // para ganhar a permissão 'authenticated' do RLS.
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: "admin@tendal.com",
+      password: password,
+    });
+
+    if (error) {
+      console.error("Login erro:", error);
+      alert("Senha incorreta ou usuário não configurado no Supabase.");
     } else {
-      alert("Senha incorreta");
+      setIsAuthenticated(true);
     }
+    
+    setIsLoggingIn(false);
   };
 
   if (!isAuthenticated) {
@@ -74,7 +90,9 @@ function AdminPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button type="submit" className="w-full">Entrar</Button>
+          <Button type="submit" className="w-full" disabled={isLoggingIn}>
+            {isLoggingIn ? "Entrando..." : "Entrar"}
+          </Button>
         </form>
       </div>
     );
