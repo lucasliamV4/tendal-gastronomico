@@ -8,7 +8,7 @@ import {
   useSiteConfigData,
   useUpdateSiteConfig,
 } from "@/hooks/useSupabaseQueries";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
