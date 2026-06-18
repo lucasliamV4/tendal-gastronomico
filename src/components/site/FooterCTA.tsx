@@ -2,7 +2,6 @@ import { useSiteConfig } from "@/contexts/SiteConfigContext";
 import { useWhatsApp } from "@/contexts/WhatsAppContext";
 import { usePromotion, useSiteImage } from "@/hooks/useSupabaseQueries";
 import { trackEvent } from "@/lib/tracking";
-import { Link } from "@tanstack/react-router";
 import logoTendal from "@/assets/logo-tendal.png";
 const FooterCTA = () => {
   const { config } = useSiteConfig();
@@ -78,11 +77,6 @@ const FooterCTA = () => {
                 </a>
               </p>
             )}
-            <p className="mt-4">
-              <Link to="/admin" className="text-white/20 hover:text-white/40 transition-colors text-xs no-underline">
-                Gerenciar
-              </Link>
-            </p>
           </div>
         </div>
       </div>
