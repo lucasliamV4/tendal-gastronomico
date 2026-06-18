@@ -84,19 +84,19 @@ const CardapioSection = () => {
               </div>
             </div>
 
-            <div className="mt-4 flex flex-col sm:flex-row gap-4 w-full sm:w-fit">
+            <div className="mt-4 flex flex-col sm:flex-row gap-4 w-full">
               <a 
                 href="https://wa.me/5511995120441" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex h-14 items-center justify-center rounded-full bg-[#25D366] px-8 text-lg font-bold text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 w-full"
+                className="inline-flex h-14 items-center justify-center rounded-full bg-[#25D366] px-8 text-lg font-bold text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 whitespace-nowrap"
               >
                 Pedir pelo WhatsApp
               </a>
 
               <Dialog onOpenChange={() => setCarouselIndex(0)}>
                 <DialogTrigger asChild>
-                  <button className="inline-flex h-14 items-center justify-center rounded-full bg-primary px-8 text-lg font-bold text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 w-full">
+                  <button className="inline-flex h-14 items-center justify-center rounded-full bg-primary px-8 text-lg font-bold text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 whitespace-nowrap">
                     Cardápio Completo
                   </button>
                 </DialogTrigger>
