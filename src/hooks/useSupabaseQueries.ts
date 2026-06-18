@@ -124,6 +124,45 @@ export function useUpdateSiteImageMeta() {
   });
 }
 
+const CAROUSEL_SLOT_KEYS = [
+  "menu_carousel_1",
+  "menu_carousel_2",
+  "menu_carousel_3",
+  "menu_carousel_4",
+  "menu_carousel_5",
+];
+
+export function useMenuCarouselImages() {
+  const { data } = useSiteImages();
+  const images = (data ?? [])
+    .filter((i) => CAROUSEL_SLOT_KEYS.includes(i.slot_key))
+    .sort((a, b) => a.slot_key.localeCompare(b.slot_key));
+  return images;
+}
+
+export function useDeleteMenuCarouselImage() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (slotKey: string) => {
+      // Find the existing record to get storage_path
+      const { data: existing } = await supabase
+        .from("site_images")
+        .select("id, storage_path")
+        .eq("slot_key", slotKey)
+        .maybeSingle();
+
+      if (existing?.storage_path) {
+        await supabase.storage.from("site-images").remove([existing.storage_path]);
+      }
+      if (existing) {
+        const { error } = await supabase.from("site_images").delete().eq("id", existing.id);
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["site_images"] }),
+  });
+}
+
 /* -------- menu_items -------- */
 export function useMenuItems(opts: { onlyActive?: boolean } = {}) {
   return useQuery({

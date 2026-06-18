@@ -1,23 +1,31 @@
 import { useState } from "react";
-import { useMenuItems, useSiteImage } from "@/hooks/useSupabaseQueries";
-import { formatBRL } from "@/lib/format";
+import { useMenuItems } from "@/hooks/useSupabaseQueries";
+import { useMenuCarouselImages } from "@/hooks/useSupabaseQueries";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 const proteins = [
-  { id: 'espetinho-carne', name: 'Espetinho de Carne', price: 'R$ 29,90', thumb: '/images/scroll_espetinho_carne.png', plate: '/images/plate_espetinho_carne.png' },
-  { id: 'espetinho-frango', name: 'Espetinho de Frango', price: 'R$ 26,90', thumb: '/images/scroll_espetinho_frango.png', plate: '/images/plate_espetinho_frango.png' },
-  { id: 'espetinho-misto', name: 'Espetinho Misto', price: 'R$ 28,90', thumb: '/images/scroll_espetinho_misto.png', plate: '/images/plate_espetinho_misto.png' },
-  { id: 'espetinho-linguica', name: 'Espetinho de Linguiça', price: 'R$ 26,90', thumb: '/images/scroll_espetinho_linguica.png', plate: '/images/plate_espetinho_linguica.png' },
-  { id: 'file-frango', name: 'Filé de Frango', price: 'R$ 27,90', thumb: '/images/scroll_file_frango.png', plate: '/images/plate_file_frango.png' },
-  { id: 'contra-file', name: 'Contra-Filé', price: 'R$ 34,90', thumb: '/images/scroll_contra_file.png', plate: '/images/plate_contra_file.png' },
-  { id: 'bisteca', name: 'Bisteca Suína', price: 'R$ 28,90', thumb: '/images/scroll_bisteca.png', plate: '/images/plate_bisteca.png' },
-  { id: 'calabresa', name: 'Calabresa', price: 'R$ 26,90', thumb: '/images/scroll_calabresa.png', plate: '/images/plate_calabresa.png' }
+  { id: 'espetinho-carne', name: 'Espetinho de Carne', thumb: '/images/scroll_espetinho_carne.png', plate: '/images/plate_espetinho_carne.png' },
+  { id: 'espetinho-frango', name: 'Espetinho de Frango', thumb: '/images/scroll_espetinho_frango.png', plate: '/images/plate_espetinho_frango.png' },
+  { id: 'espetinho-misto', name: 'Espetinho Misto', thumb: '/images/scroll_espetinho_misto.png', plate: '/images/plate_espetinho_misto.png' },
+  { id: 'espetinho-linguica', name: 'Espetinho de Linguiça', thumb: '/images/scroll_espetinho_linguica.png', plate: '/images/plate_espetinho_linguica.png' },
+  { id: 'file-frango', name: 'Filé de Frango', thumb: '/images/scroll_file_frango.png', plate: '/images/plate_file_frango.png' },
+  { id: 'contra-file', name: 'Contra-Filé', thumb: '/images/scroll_contra_file.png', plate: '/images/plate_contra_file.png' },
+  { id: 'bisteca', name: 'Bisteca Suína', thumb: '/images/scroll_bisteca.png', plate: '/images/plate_bisteca.png' },
+  { id: 'calabresa', name: 'Calabresa', thumb: '/images/scroll_calabresa.png', plate: '/images/plate_calabresa.png' }
 ];
 
 const CardapioSection = () => {
   const { data: items, isLoading } = useMenuItems({ onlyActive: true });
   const [selectedProtein, setSelectedProtein] = useState(proteins[0]);
-  const fullMenuImage = useSiteImage("full_menu_image");
+  const carouselImages = useMenuCarouselImages();
+  const [carouselIndex, setCarouselIndex] = useState(0);
+
+  const handlePrev = () => {
+    setCarouselIndex((prev) => (prev === 0 ? carouselImages.length - 1 : prev - 1));
+  };
+  const handleNext = () => {
+    setCarouselIndex((prev) => (prev === carouselImages.length - 1 ? 0 : prev + 1));
+  };
 
   return (
     <section id="cardapio" className="bg-white py-16 md:py-24">
@@ -61,7 +69,7 @@ const CardapioSection = () => {
           {/* Lado Direito: Copy / CTA */}
           <div className="w-full lg:w-7/12 flex flex-col gap-6 lg:py-8">
             <h3 className="font-heading text-3xl md:text-4xl font-black uppercase text-foreground leading-tight tracking-tight">
-              {selectedProtein.name} <span className="text-primary">{selectedProtein.price}</span>
+              {selectedProtein.name}
             </h3>
             
             <p className="text-lg text-muted-foreground leading-relaxed">
@@ -86,22 +94,81 @@ const CardapioSection = () => {
                 Pedir pelo WhatsApp
               </a>
 
-              {fullMenuImage?.url && (
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <button className="inline-flex h-14 items-center justify-center rounded-full bg-primary px-8 text-lg font-bold text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 w-full">
-                      Ver Cardápio Completo
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl w-[95vw] p-1 bg-transparent border-none shadow-none flex justify-center items-center">
-                    <img 
-                      src={fullMenuImage.url} 
-                      alt="Cardápio Completo" 
-                      className="max-h-[90vh] max-w-full object-contain rounded-xl"
-                    />
-                  </DialogContent>
-                </Dialog>
-              )}
+              <Dialog onOpenChange={() => setCarouselIndex(0)}>
+                <DialogTrigger asChild>
+                  <button className="inline-flex h-14 items-center justify-center rounded-full bg-primary px-8 text-lg font-bold text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 w-full">
+                    Cardápio Completo
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl w-[95vw] p-0 bg-white border-none shadow-2xl rounded-2xl overflow-hidden">
+                  <div className="flex flex-col">
+                    {/* Carousel Area */}
+                    {carouselImages.length > 0 ? (
+                      <div className="relative w-full bg-gray-100">
+                        <img 
+                          src={carouselImages[carouselIndex]?.url} 
+                          alt={`Cardápio página ${carouselIndex + 1}`} 
+                          className="w-full max-h-[70vh] object-contain mx-auto"
+                        />
+                        
+                        {/* Navigation arrows */}
+                        {carouselImages.length > 1 && (
+                          <>
+                            <button 
+                              onClick={handlePrev}
+                              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center hover:bg-white transition-colors"
+                              aria-label="Imagem anterior"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                            </button>
+                            <button 
+                              onClick={handleNext}
+                              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center hover:bg-white transition-colors"
+                              aria-label="Próxima imagem"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                            </button>
+                          </>
+                        )}
+
+                        {/* Dot indicators */}
+                        {carouselImages.length > 1 && (
+                          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                            {carouselImages.map((_, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => setCarouselIndex(idx)}
+                                className={`w-2.5 h-2.5 rounded-full transition-all ${
+                                  idx === carouselIndex 
+                                    ? 'bg-primary scale-125' 
+                                    : 'bg-white/70 hover:bg-white'
+                                }`}
+                                aria-label={`Ir para imagem ${idx + 1}`}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="w-full h-64 flex items-center justify-center bg-gray-100">
+                        <p className="text-muted-foreground text-lg">Cardápio em breve!</p>
+                      </div>
+                    )}
+
+                    {/* WhatsApp CTA inside popup */}
+                    <div className="p-6 flex justify-center">
+                      <a 
+                        href="https://wa.me/5511995120441" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex h-14 items-center justify-center rounded-full bg-[#25D366] px-10 text-lg font-bold text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2"
+                      >
+                        Pedir pelo WhatsApp
+                      </a>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </div>
