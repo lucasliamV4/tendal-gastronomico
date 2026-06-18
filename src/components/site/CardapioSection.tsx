@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useMenuItems, useSiteImage } from "@/hooks/useSupabaseQueries";
+import { useMenuItems, useSiteImages } from "@/hooks/useSupabaseQueries";
 import { formatBRL } from "@/lib/format";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 const proteins = [
   { id: 'espetinho-carne', name: 'Espetinho de Carne', price: 'R$ 29,90', thumb: '/images/scroll_espetinho_carne.png', plate: '/images/plate_espetinho_carne.png' },
@@ -17,7 +16,6 @@ const proteins = [
 const CardapioSection = () => {
   const { data: items, isLoading } = useMenuItems({ onlyActive: true });
   const [selectedProtein, setSelectedProtein] = useState(proteins[0]);
-  const fullMenuImage = useSiteImage("full_menu_image");
 
   return (
     <section id="cardapio" className="bg-white py-16 md:py-24">
@@ -76,32 +74,15 @@ const CardapioSection = () => {
               </div>
             </div>
 
-            <div className="mt-4 flex flex-col sm:flex-row gap-4 w-full sm:w-fit">
+            <div className="mt-4">
               <a 
                 href="https://wa.me/5511995120441" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex h-14 items-center justify-center rounded-full bg-[#25D366] px-8 text-lg font-bold text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 w-full"
+                className="inline-flex h-14 items-center justify-center rounded-full bg-[#25D366] px-8 text-lg font-bold text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 w-full sm:w-fit"
               >
                 Pedir pelo WhatsApp
               </a>
-
-              {fullMenuImage?.url && (
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <button className="inline-flex h-14 items-center justify-center rounded-full bg-primary px-8 text-lg font-bold text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 w-full">
-                      Ver Cardápio Completo
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl w-[95vw] p-1 bg-transparent border-none shadow-none flex justify-center items-center">
-                    <img 
-                      src={fullMenuImage.url} 
-                      alt="Cardápio Completo" 
-                      className="max-h-[90vh] max-w-full object-contain rounded-xl"
-                    />
-                  </DialogContent>
-                </Dialog>
-              )}
             </div>
           </div>
         </div>
