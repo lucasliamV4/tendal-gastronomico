@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useMenuItems } from "@/hooks/useSupabaseQueries";
-import { useMenuCarouselImages } from "@/hooks/useSupabaseQueries";
+import { useMenuItems, useMenuCarouselImages, useSiteImages, useSiteConfigData } from "@/hooks/useSupabaseQueries";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 const proteins = [
@@ -19,6 +18,18 @@ const CardapioSection = () => {
   const [selectedProtein, setSelectedProtein] = useState(proteins[0]);
   const carouselImages = useMenuCarouselImages();
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const { data: allImages } = useSiteImages();
+  const { data: siteTexts } = useSiteConfigData();
+
+  // Helper to get dynamic image URL with local fallback
+  const getThumb = (p: typeof proteins[0]) => {
+    const dynamic = allImages?.find((i) => i.slot_key === `protein_thumb_${p.id}`);
+    return dynamic?.url || p.thumb;
+  };
+  const getPlate = (p: typeof proteins[0]) => {
+    const dynamic = allImages?.find((i) => i.slot_key === `protein_plate_${p.id}`);
+    return dynamic?.url || p.plate;
+  };
 
   const handlePrev = () => {
     setCarouselIndex((prev) => (prev === 0 ? carouselImages.length - 1 : prev - 1));
@@ -40,7 +51,7 @@ const CardapioSection = () => {
           <div className="w-full lg:w-5/12 flex flex-col gap-4">
             <div className="aspect-square w-full rounded-2xl overflow-hidden bg-muted shadow-md">
               <img 
-                src={selectedProtein.plate} 
+                src={getPlate(selectedProtein)} 
                 alt={selectedProtein.name} 
                 className="h-full w-full object-cover transition-opacity duration-500" 
               />
@@ -57,7 +68,7 @@ const CardapioSection = () => {
                   }`}
                 >
                   <img 
-                    src={p.thumb} 
+                    src={getThumb(p)} 
                     alt={p.name} 
                     className="h-full w-full object-cover bg-white" 
                   />
@@ -73,13 +84,13 @@ const CardapioSection = () => {
             </h3>
             
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Nosso tradicional Prato Feito acompanha arroz branco soltinho, feijão temperado com aquele gostinho caseiro, salada fresca, legumes salteados na manteiga e a proteína da sua escolha. Tudo preparado com ingredientes selecionados e o inconfundível sabor da brasa!
+              {siteTexts?.menu_description || "Nosso tradicional Prato Feito acompanha arroz branco soltinho, feijão temperado com aquele gostinho caseiro, salada fresca, legumes salteados na manteiga e a proteína da sua escolha. Tudo preparado com ingredientes selecionados e o inconfundível sabor da brasa!"}
             </p>
 
             <div className="mt-2 flex items-start gap-3 rounded-xl bg-amber-500/10 border border-amber-500/20 p-5">
               <div className="flex-1">
                 <p className="text-base font-semibold text-amber-700 dark:text-amber-400">
-                  PF servido de terça a sexta, das 11h30 às 15h.
+                  {siteTexts?.menu_schedule_text || "PF servido de terça a sexta, das 11h30 às 15h."}
                 </p>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import { useSiteConfig } from "@/contexts/SiteConfigContext";
 import { useWhatsApp } from "@/contexts/WhatsAppContext";
-import { usePromotion, useSiteImage } from "@/hooks/useSupabaseQueries";
+import { usePromotion, useSiteImage, useSiteConfigData } from "@/hooks/useSupabaseQueries";
 import { trackEvent } from "@/lib/tracking";
 
 const HeroSection = () => {
@@ -8,6 +8,7 @@ const HeroSection = () => {
   const { redeemCoupon } = useWhatsApp();
   const heroBg = useSiteImage("hero_background");
   const { data: promotion } = usePromotion();
+  const { data: siteTexts } = useSiteConfigData();
 
   const reference = config?.reference_distance ?? "60 metros do Poupa Tempo Lapa";
 
@@ -42,7 +43,7 @@ const HeroSection = () => {
     <section
       className="relative isolate overflow-hidden bg-neutral-900 text-white"
       style={{
-        backgroundImage: `url('/images/hero.png')`,
+        backgroundImage: `url('${heroBg?.url || "/images/hero.png"}')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -64,12 +65,11 @@ const HeroSection = () => {
           </div>
 
           <h1 className="mt-4 break-words font-heading text-3xl font-bold leading-tight sm:text-4xl md:text-5xl lg:text-6xl">
-            Almoço e tranquilidade na Lapa: brasa, ambiente arborizado e chopp artesanal próprio.
+            {siteTexts?.hero_title || "Almoço e tranquilidade na Lapa: brasa, ambiente arborizado e chopp artesanal próprio."}
           </h1>
 
           <p className="mt-5 text-lg text-white/85 md:text-xl">
-            Dentro do Centro Cultural Tendal da Lapa. Carne grelhada no charbroiler, arroz que muda
-            toda semana, e um patio pra voce comer sem pressa.
+            {siteTexts?.hero_subtitle || "Dentro do Centro Cultural Tendal da Lapa. Carne grelhada no charbroiler, arroz que muda toda semana, e um patio pra voce comer sem pressa."}
           </p>
 
           {promotion?.active && (

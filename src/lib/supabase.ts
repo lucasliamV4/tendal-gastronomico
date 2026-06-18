@@ -18,6 +18,10 @@ export type SiteConfig = {
   google_ads_conversion_label: string | null;
   reference_landmark: string;
   reference_distance: string;
+  hero_title: string | null;
+  hero_subtitle: string | null;
+  menu_description: string | null;
+  menu_schedule_text: string | null;
   updated_at: string;
 };
 
