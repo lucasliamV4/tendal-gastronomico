@@ -293,7 +293,8 @@ function TabPratos({ uploadTimestamps }: { uploadTimestamps: React.MutableRefObj
     <div>
       <h2 className="text-xl font-semibold mb-2">Fotos dos Pratos</h2>
       <p className="text-sm text-gray-500 mb-6">
-        Cada prato tem 2 fotos: a miniatura do scroll e a foto grande. Se nenhuma for enviada, a imagem padrão será usada.
+        Cada prato tem 2 fotos: a miniatura do scroll e a foto grande. Se nenhuma for enviada, a imagem padrão será usada.<br />
+        <strong>Padrão recomendado:</strong> Imagens em miniatura 500px por 500px com fundo branco.
       </p>
       <div className="space-y-8">
         {PROTEINS.map((protein) => (
@@ -355,6 +356,7 @@ function TabTextos() {
   const [heroSubtitle, setHeroSubtitle] = useState("");
   const [menuDesc, setMenuDesc] = useState("");
   const [menuSchedule, setMenuSchedule] = useState("");
+  const [whatsappNumber, setWhatsappNumber] = useState("");
   const [loaded, setLoaded] = useState(false);
 
   // Load current values from config
@@ -363,6 +365,7 @@ function TabTextos() {
     setHeroSubtitle(config.hero_subtitle ?? "Dentro do Centro Cultural Tendal da Lapa. Carne grelhada no charbroiler, arroz que muda toda semana, e um patio pra voce comer sem pressa.");
     setMenuDesc(config.menu_description ?? "Nosso tradicional Prato Feito acompanha arroz branco soltinho, feijão temperado com aquele gostinho caseiro, salada fresca, legumes salteados na manteiga e a proteína da sua escolha. Tudo preparado com ingredientes selecionados e o inconfundível sabor da brasa!");
     setMenuSchedule(config.menu_schedule_text ?? "PF servido de terça a sexta, das 11h30 às 15h.");
+    setWhatsappNumber(config.whatsapp_number ?? "");
     setLoaded(true);
   }
 
@@ -373,6 +376,7 @@ function TabTextos() {
         hero_subtitle: heroSubtitle,
         menu_description: menuDesc,
         menu_schedule_text: menuSchedule,
+        whatsapp_number: whatsappNumber,
       });
       alert("Textos salvos com sucesso!");
     } catch (err) {
@@ -420,6 +424,14 @@ function TabTextos() {
           <Input
             value={menuSchedule}
             onChange={(e) => setMenuSchedule(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Número do WhatsApp</label>
+          <Input
+            value={whatsappNumber}
+            onChange={(e) => setWhatsappNumber(e.target.value)}
+            placeholder="Ex: 5511999999999"
           />
         </div>
         <Button onClick={handleSave} disabled={updateConfig.isPending} className="w-full sm:w-auto">
