@@ -28,7 +28,7 @@ export function useSiteConfigData() {
       const { data, error } = await supabase
         .from("site_config")
         .select("*")
-        .eq("id", SITE_CONFIG_ID)
+        .limit(1)
         .single();
       if (error) throw error;
       return data as unknown as SiteConfig;
@@ -41,10 +41,14 @@ export function useUpdateSiteConfig() {
   return useMutation({
     mutationFn: async (patch: Partial<SiteConfig>) => {
       const { id: _ignore, updated_at: _ignore2, ...rest } = patch as SiteConfig;
+      
+      const { data: current } = await supabase.from("site_config").select("id").limit(1).single();
+      if (!current) throw new Error("Config row not found");
+
       const { data, error } = await supabase
         .from("site_config")
         .update(rest)
-        .eq("id", SITE_CONFIG_ID)
+        .eq("id", current.id)
         .select()
         .single();
       if (error) throw error;
