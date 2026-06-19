@@ -377,7 +377,7 @@ function TabTextos() {
       alert("Textos salvos com sucesso!");
     } catch (err) {
       console.error(err);
-      alert("Erro ao salvar textos.");
+      alert("Erro ao salvar textos: " + (err?.message || JSON.stringify(err)));
     }
   };
 
@@ -458,9 +458,9 @@ function TabTestemunhos({ uploadTimestamps }: { uploadTimestamps: React.MutableR
         testemunhos_subtitle: subtitle,
       });
       alert("Configurações de Testemunhos salvas com sucesso!");
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert("Erro ao salvar configurações.");
+      alert("Erro ao salvar configurações: " + (err?.message || JSON.stringify(err)));
     }
   };
 
