@@ -252,6 +252,9 @@ export type Database = {
           hero_subtitle: string | null
           menu_description: string | null
           menu_schedule_text: string | null
+          testemunhos_visible: boolean
+          testemunhos_title: string | null
+          testemunhos_subtitle: string | null
           updated_at: string
           whatsapp_default_message: string
           whatsapp_number: string
@@ -278,6 +281,9 @@ export type Database = {
           hero_subtitle?: string | null
           menu_description?: string | null
           menu_schedule_text?: string | null
+          testemunhos_visible?: boolean
+          testemunhos_title?: string | null
+          testemunhos_subtitle?: string | null
           updated_at?: string
           whatsapp_default_message?: string
           whatsapp_number?: string
@@ -304,6 +310,9 @@ export type Database = {
           hero_subtitle?: string | null
           menu_description?: string | null
           menu_schedule_text?: string | null
+          testemunhos_visible?: boolean
+          testemunhos_title?: string | null
+          testemunhos_subtitle?: string | null
           updated_at?: string
           whatsapp_default_message?: string
           whatsapp_number?: string
