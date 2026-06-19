@@ -357,6 +357,7 @@ function TabTextos() {
   const [menuDesc, setMenuDesc] = useState("");
   const [menuSchedule, setMenuSchedule] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState("");
+  const [googleMapsUrl, setGoogleMapsUrl] = useState("");
   const [loaded, setLoaded] = useState(false);
 
   // Load current values from config
@@ -366,6 +367,7 @@ function TabTextos() {
     setMenuDesc(config.menu_description ?? "Nosso tradicional Prato Feito acompanha arroz branco soltinho, feijão temperado com aquele gostinho caseiro, salada fresca, legumes salteados na manteiga e a proteína da sua escolha. Tudo preparado com ingredientes selecionados e o inconfundível sabor da brasa!");
     setMenuSchedule(config.menu_schedule_text ?? "PF servido de terça a sexta, das 11h30 às 15h.");
     setWhatsappNumber(config.whatsapp_number ?? "");
+    setGoogleMapsUrl(config.google_maps_url ?? "");
     setLoaded(true);
   }
 
@@ -377,6 +379,7 @@ function TabTextos() {
         menu_description: menuDesc,
         menu_schedule_text: menuSchedule,
         whatsapp_number: whatsappNumber,
+        google_maps_url: googleMapsUrl,
       });
       alert("Textos salvos com sucesso!");
     } catch (err) {
@@ -432,6 +435,14 @@ function TabTextos() {
             value={whatsappNumber}
             onChange={(e) => setWhatsappNumber(e.target.value)}
             placeholder="Ex: 5511999999999"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Link do Google Maps</label>
+          <Input
+            value={googleMapsUrl}
+            onChange={(e) => setGoogleMapsUrl(e.target.value)}
+            placeholder="Ex: https://maps.app.goo.gl/..."
           />
         </div>
         <Button onClick={handleSave} disabled={updateConfig.isPending} className="w-full sm:w-auto">
