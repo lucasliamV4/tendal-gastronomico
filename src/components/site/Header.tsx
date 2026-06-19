@@ -34,9 +34,6 @@ const Header = () => {
           <a href="#cardapio" className="hover:text-white">
             Cardapio
           </a>
-          <a href="#cupom" className="hover:text-white">
-            Cupom
-          </a>
           <a href="#como-chegar" className="hover:text-white">
             Como chegar
           </a>

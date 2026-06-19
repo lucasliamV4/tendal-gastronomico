@@ -7,8 +7,8 @@ const ComoChegarSection = () => {
   const videoPoster = useSiteImage("route_video_poster");
   const handleOpenMaps = () => {
     trackEvent("FindLocation", { source: "como_chegar_button" });
-    if (config?.google_maps_url)
-      window.open(config.google_maps_url, "_blank", "noopener,noreferrer");
+    const mapsUrl = config?.google_maps_url || "https://www.google.com/maps/place/Centro+Cultural+Tendal+da+Lapa/@-23.5223268,-46.6961816,1003m/data=!3m2!1e3!4b1!4m6!3m5!1s0x94cef86e2f4bbced:0x6a7648fd5bc55629!8m2!3d-23.5223268!4d-46.6961816!16s%2Fg%2F120j3qcz?hl=pt-BR&entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D";
+    window.open(mapsUrl, "_blank", "noopener,noreferrer");
   };
   return (
     <section id="como-chegar" className="bg-background py-16 md:py-24">

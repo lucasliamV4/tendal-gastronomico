@@ -92,3 +92,11 @@ CREATE POLICY IF NOT EXISTS "Auth delete site-images"
   ON storage.objects FOR DELETE
   TO authenticated
   USING (bucket_id = 'site-images');
+
+-- ============================================================
+-- TESTEMUNHOS SECTION — add config columns
+-- ============================================================
+ALTER TABLE site_config
+  ADD COLUMN IF NOT EXISTS testemunhos_visible boolean NOT NULL DEFAULT false,
+  ADD COLUMN IF NOT EXISTS testemunhos_title text DEFAULT 'Quem já foi',
+  ADD COLUMN IF NOT EXISTS testemunhos_subtitle text DEFAULT 'O que os clientes falam.';

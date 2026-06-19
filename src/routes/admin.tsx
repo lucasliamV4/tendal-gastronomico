@@ -36,13 +36,23 @@ const PROTEINS = [
   { id: "calabresa", name: "Calabresa" },
 ];
 
-type TabId = "cardapio" | "pratos" | "hero" | "textos";
+type TabId = "cardapio" | "pratos" | "hero" | "textos" | "testemunhos";
+
+const TESTEMUNHO_SLOTS = [
+  "testemunho_1",
+  "testemunho_2",
+  "testemunho_3",
+  "testemunho_4",
+  "testemunho_5",
+  "testemunho_6",
+];
 
 const TABS: { id: TabId; label: string }[] = [
   { id: "cardapio", label: "Cardápio Completo" },
   { id: "pratos", label: "Fotos dos Pratos" },
   { id: "hero", label: "Hero" },
   { id: "textos", label: "Textos" },
+  { id: "testemunhos", label: "Testemunhos" },
 ];
 
 export const Route = createFileRoute("/admin")({
@@ -132,6 +142,9 @@ function AdminPage() {
             <TabHero uploadTimestamps={uploadTimestamps} />
           )}
           {activeTab === "textos" && <TabTextos />}
+          {activeTab === "testemunhos" && (
+            <TabTestemunhos uploadTimestamps={uploadTimestamps} />
+          )}
         </div>
 
         <div className="mt-4 p-4 rounded-lg bg-amber-50 border border-amber-200">
@@ -412,6 +425,106 @@ function TabTextos() {
         <Button onClick={handleSave} disabled={updateConfig.isPending} className="w-full sm:w-auto">
           {updateConfig.isPending ? "Salvando..." : "Salvar Textos"}
         </Button>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   Tab 5: Testemunhos
+   ============================================================ */
+
+function TabTestemunhos({ uploadTimestamps }: { uploadTimestamps: React.MutableRefObject<number[]> }) {
+  const { data: config } = useSiteConfigData();
+  const updateConfig = useUpdateSiteConfig();
+
+  const [visible, setVisible] = useState(false);
+  const [title, setTitle] = useState("");
+  const [subtitle, setSubtitle] = useState("");
+  const [loaded, setLoaded] = useState(false);
+
+  if (config && !loaded) {
+    setVisible(config.testemunhos_visible ?? false);
+    setTitle(config.testemunhos_title ?? "Quem já foi");
+    setSubtitle(config.testemunhos_subtitle ?? "O que os clientes falam.");
+    setLoaded(true);
+  }
+
+  const handleSave = async () => {
+    try {
+      await updateConfig.mutateAsync({
+        testemunhos_visible: visible,
+        testemunhos_title: title,
+        testemunhos_subtitle: subtitle,
+      });
+      alert("Configurações de Testemunhos salvas com sucesso!");
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao salvar configurações.");
+    }
+  };
+
+  return (
+    <div>
+      <h2 className="text-xl font-semibold mb-2">Seção de Testemunhos</h2>
+      <p className="text-sm text-gray-500 mb-6">
+        Configure a galeria de imagens de testemunhos. A seção só aparece no site quando estiver ativada e tiver pelo menos uma imagem.
+      </p>
+
+      {/* Visibility toggle */}
+      <div className="flex items-center gap-3 mb-6 p-4 rounded-lg bg-gray-50 border">
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            checked={visible}
+            onChange={(e) => setVisible(e.target.checked)}
+            className="sr-only peer"
+          />
+          <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+        </label>
+        <span className="text-sm font-medium text-gray-700">
+          {visible ? "Seção visível no site" : "Seção oculta"}
+        </span>
+      </div>
+
+      {/* Text fields */}
+      <div className="space-y-4 max-w-2xl mb-8">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Título da seção</label>
+          <Input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Ex: Quem já foi"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Subtítulo</label>
+          <Input
+            value={subtitle}
+            onChange={(e) => setSubtitle(e.target.value)}
+            placeholder="Ex: O que os clientes falam."
+          />
+        </div>
+        <Button onClick={handleSave} disabled={updateConfig.isPending} className="w-full sm:w-auto">
+          {updateConfig.isPending ? "Salvando..." : "Salvar Configurações"}
+        </Button>
+      </div>
+
+      {/* Image slots */}
+      <h3 className="text-lg font-semibold mb-2">Fotos de Testemunhos</h3>
+      <p className="text-sm text-gray-500 mb-4">
+        Envie até 6 fotos horizontais (prints de avaliações, stories, etc). As imagens aparecerão num scroll horizontal.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {TESTEMUNHO_SLOTS.map((slot, i) => (
+          <ImageSlot
+            key={slot}
+            slotKey={slot}
+            label={`Testemunho ${i + 1}`}
+            uploadTimestamps={uploadTimestamps}
+            aspectRatio="aspect-video"
+          />
+        ))}
       </div>
     </div>
   );
