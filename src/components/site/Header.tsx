@@ -37,9 +37,11 @@ const Header = () => {
           <a href="#como-chegar" className="hover:text-white">
             Como chegar
           </a>
-          <a href="#testemunhos" className="hover:text-white">
-            Testemunhos
-          </a>
+          {config?.testemunhos_visible && (
+            <a href="#testemunhos" className="hover:text-white">
+              Testemunhos
+            </a>
+          )}
           <a href="#faq" className="hover:text-white">
             FAQ
           </a>
