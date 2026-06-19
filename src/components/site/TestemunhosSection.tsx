@@ -25,7 +25,7 @@ const TestemunhosSection = () => {
   const subtitle = config.testemunhos_subtitle ?? "O que os clientes falam.";
 
   return (
-    <section id="testemunhos" className="bg-secondary/30 py-16 md:py-24">
+    <section id="testemunhos" className="bg-white py-16 md:py-24">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mx-auto max-w-2xl text-center">
