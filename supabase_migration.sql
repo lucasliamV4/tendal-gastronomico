@@ -15,17 +15,19 @@ ALTER TABLE site_config ENABLE ROW LEVEL SECURITY;
 ALTER TABLE site_images ENABLE ROW LEVEL SECURITY;
 
 -- 3. PUBLIC READ policies (anyone can read the site content)
-CREATE POLICY IF NOT EXISTS "Public can read site_config"
+-- Drop first to avoid "already exists" errors, then recreate
+DROP POLICY IF EXISTS "Public can read site_config" ON site_config;
+CREATE POLICY "Public can read site_config"
   ON site_config FOR SELECT
   USING (true);
 
-CREATE POLICY IF NOT EXISTS "Public can read site_images"
+DROP POLICY IF EXISTS "Public can read site_images" ON site_images;
+CREATE POLICY "Public can read site_images"
   ON site_images FOR SELECT
   USING (true);
 
 -- 4. BLOCK all writes from anon role (no one can modify via public API key)
 -- Only service_role or authenticated admin users can write.
--- Since we use the anon key on the frontend, these policies block all writes.
 
 -- Remove any existing permissive write policies that might exist
 DROP POLICY IF EXISTS "Allow insert site_config" ON site_config;
@@ -34,6 +36,13 @@ DROP POLICY IF EXISTS "Allow delete site_config" ON site_config;
 DROP POLICY IF EXISTS "Allow insert site_images" ON site_images;
 DROP POLICY IF EXISTS "Allow update site_images" ON site_images;
 DROP POLICY IF EXISTS "Allow delete site_images" ON site_images;
+
+-- Drop existing authenticated policies to avoid conflicts
+DROP POLICY IF EXISTS "Authenticated can insert site_config" ON site_config;
+DROP POLICY IF EXISTS "Authenticated can update site_config" ON site_config;
+DROP POLICY IF EXISTS "Authenticated can insert site_images" ON site_images;
+DROP POLICY IF EXISTS "Authenticated can update site_images" ON site_images;
+DROP POLICY IF EXISTS "Authenticated can delete site_images" ON site_images;
 
 -- Create restrictive write policies: only authenticated users can write
 CREATE POLICY "Authenticated can insert site_config"
@@ -64,31 +73,31 @@ CREATE POLICY "Authenticated can delete site_images"
   USING (true);
 
 -- 5. Storage: ensure the site-images bucket exists and is public for reads
--- (This should already be set up, but just in case)
 INSERT INTO storage.buckets (id, name, public, file_size_limit)
 VALUES ('site-images', 'site-images', true, 52428800)
 ON CONFLICT (id) DO UPDATE SET public = true, file_size_limit = 52428800;
 
 -- Storage policies for the site-images bucket
--- Allow anyone to read (download) images
-CREATE POLICY IF NOT EXISTS "Public read site-images"
+-- Drop first, then recreate
+DROP POLICY IF EXISTS "Public read site-images" ON storage.objects;
+CREATE POLICY "Public read site-images"
   ON storage.objects FOR SELECT
   USING (bucket_id = 'site-images');
 
--- Allow authenticated users to upload
-CREATE POLICY IF NOT EXISTS "Auth upload site-images"
+DROP POLICY IF EXISTS "Auth upload site-images" ON storage.objects;
+CREATE POLICY "Auth upload site-images"
   ON storage.objects FOR INSERT
   TO authenticated
   WITH CHECK (bucket_id = 'site-images');
 
--- Allow authenticated users to update/overwrite
-CREATE POLICY IF NOT EXISTS "Auth update site-images"
+DROP POLICY IF EXISTS "Auth update site-images" ON storage.objects;
+CREATE POLICY "Auth update site-images"
   ON storage.objects FOR UPDATE
   TO authenticated
   USING (bucket_id = 'site-images');
 
--- Allow authenticated users to delete
-CREATE POLICY IF NOT EXISTS "Auth delete site-images"
+DROP POLICY IF EXISTS "Auth delete site-images" ON storage.objects;
+CREATE POLICY "Auth delete site-images"
   ON storage.objects FOR DELETE
   TO authenticated
   USING (bucket_id = 'site-images');
