@@ -29,9 +29,10 @@ export function useSiteConfigData() {
         .from("site_config")
         .select("*")
         .limit(1)
-        .single();
+        .maybeSingle();
       if (error) throw error;
-      return data as unknown as SiteConfig;
+      // Se não existir, retornamos um objeto vazio e o frontend usa os fallbacks (?? default)
+      return (data || {}) as unknown as SiteConfig;
     },
   });
 }
@@ -42,9 +43,21 @@ export function useUpdateSiteConfig() {
     mutationFn: async (patch: Partial<SiteConfig>) => {
       const { id: _ignore, updated_at: _ignore2, ...rest } = patch as SiteConfig;
       
-      const { data: current } = await supabase.from("site_config").select("id").limit(1).single();
-      if (!current) throw new Error("Config row not found");
+      // Use maybeSingle to prevent PGRST116 if table is completely empty
+      const { data: current } = await supabase.from("site_config").select("id").limit(1).maybeSingle();
+      
+      if (!current) {
+        // Se a tabela estiver vazia, fazemos um INSERT em vez de UPDATE
+        const { data, error } = await supabase
+          .from("site_config")
+          .insert(rest)
+          .select()
+          .single();
+        if (error) throw error;
+        return data as unknown as SiteConfig;
+      }
 
+      // Se existir, atualizamos o ID existente
       const { data, error } = await supabase
         .from("site_config")
         .update(rest)
