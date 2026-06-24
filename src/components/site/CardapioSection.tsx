@@ -41,7 +41,10 @@ const CardapioSection = () => {
   return (
     <section id="cardapio" className="bg-white py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-2xl text-center mb-8">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-black uppercase text-foreground leading-tight">
+            Conheça nosso Cardápio
+          </h2>
         </div>
 
         <div className="mt-12 flex flex-col lg:flex-row gap-12 lg:gap-16 items-start lg:items-center">
@@ -78,9 +81,6 @@ const CardapioSection = () => {
 
           {/* Lado Direito: Copy / CTA */}
           <div className="w-full lg:w-7/12 flex flex-col gap-6 lg:py-8">
-            <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-black uppercase text-foreground leading-tight mb-2">
-              Conheça nosso Cardápio
-            </h2>
             <h3 className="font-heading text-2xl md:text-3xl font-black uppercase text-primary leading-tight tracking-tight">
               {selectedProtein.name}
             </h3>
