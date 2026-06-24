@@ -273,7 +273,8 @@ function TabCardapio({ uploadTimestamps }: { uploadTimestamps: React.MutableRefO
     <div>
       <h2 className="text-xl font-semibold mb-2">Imagens do Cardápio Completo</h2>
       <p className="text-sm text-gray-500 mb-6">
-        Estas imagens aparecem quando o cliente clica em "Cardápio Completo". Máximo 5 imagens.
+        Estas imagens aparecem quando o cliente clica em "Cardápio Completo". Máximo 5 imagens.<br/>
+        <strong>Tamanho recomendado:</strong> 1080x1440 px (formato retrato, proporção 3:4).
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {CAROUSEL_SLOTS.map((slot, i) => (
@@ -294,7 +295,7 @@ function TabPratos({ uploadTimestamps }: { uploadTimestamps: React.MutableRefObj
       <h2 className="text-xl font-semibold mb-2">Fotos dos Pratos</h2>
       <p className="text-sm text-gray-500 mb-6">
         Cada prato tem 2 fotos: a miniatura do scroll e a foto grande. Se nenhuma for enviada, a imagem padrão será usada.<br />
-        <strong>Padrão recomendado:</strong> Imagens em miniatura 500px por 500px com fundo branco.
+        <strong>Tamanho recomendado:</strong> Miniatura 500x500 px (fundo branco). Foto do prato 1080x1080 px (formato quadrado).
       </p>
       <div className="space-y-8">
         {PROTEINS.map((protein) => (
@@ -330,7 +331,8 @@ function TabHero({ uploadTimestamps }: { uploadTimestamps: React.MutableRefObjec
     <div>
       <h2 className="text-xl font-semibold mb-2">Imagem de Fundo do Hero</h2>
       <p className="text-sm text-gray-500 mb-6">
-        Esta é a imagem de fundo que aparece na parte superior do site.
+        Esta é a imagem de fundo que aparece na parte superior do site.<br/>
+        <strong>Tamanho recomendado:</strong> 1920x1080 px (formato paisagem, proporção 16:9).
       </p>
       <div className="max-w-md">
         <ImageSlot
@@ -536,7 +538,8 @@ function TabTestemunhos({ uploadTimestamps }: { uploadTimestamps: React.MutableR
       {/* Image slots */}
       <h3 className="text-lg font-semibold mb-2">Fotos de Testemunhos</h3>
       <p className="text-sm text-gray-500 mb-4">
-        Envie até 6 fotos horizontais (prints de avaliações, stories, etc). As imagens aparecerão num scroll horizontal.
+        Envie até 6 fotos horizontais (prints de avaliações, stories, etc). As imagens aparecerão num scroll horizontal.<br/>
+        <strong>Tamanho recomendado:</strong> 1080x608 px (formato paisagem, proporção 16:9).
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {TESTEMUNHO_SLOTS.map((slot, i) => (
